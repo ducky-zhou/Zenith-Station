@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session, joinedload
 
-from app.api.deps import require_admin
+from app.api.deps import get_optional_user, require_admin
 from app.db.session import get_db
 from app.models import Comment, Favorite, Like, Post, User
 from app.schemas.post import PostCreate, PostDetail, PostRead, PostUpdate
@@ -23,9 +23,12 @@ def with_counts(post: Post, db: Session) -> PostRead:
 def list_posts(
     q: str | None = Query(default=None, max_length=100),
     include_drafts: bool = False,
+    current_user: User | None = Depends(get_optional_user),
     db: Session = Depends(get_db),
 ):
     stmt = select(Post).order_by(Post.created_at.desc())
+    if include_drafts and (current_user is None or current_user.role != "admin"):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin permission required")
     if not include_drafts:
         stmt = stmt.where(Post.status == "published")
     if q:
@@ -35,9 +38,13 @@ def list_posts(
 
 
 @router.get("/{post_id}", response_model=PostDetail)
-def get_post(post_id: int, db: Session = Depends(get_db)):
+def get_post(
+    post_id: int,
+    current_user: User | None = Depends(get_optional_user),
+    db: Session = Depends(get_db),
+):
     post = db.scalar(select(Post).options(joinedload(Post.author)).where(Post.id == post_id))
-    if post is None or post.status != "published":
+    if post is None or (post.status != "published" and (current_user is None or current_user.role != "admin")):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
     detail = PostDetail.model_validate(post)
     detail.likes_count = db.scalar(select(func.count(Like.id)).where(Like.post_id == post.id)) or 0

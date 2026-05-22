@@ -13,6 +13,7 @@ settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    settings.validate_runtime_security()
     ensure_seed_data()
     yield
 
