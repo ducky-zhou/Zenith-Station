@@ -17,7 +17,7 @@ export function SecurityGame() {
   const [startedAt, setStartedAt] = useState(Date.now());
   const [error, setError] = useState("");
 
-  const gameLabel = useMemo(() => gameName.replaceAll("-", " "), [gameName]);
+  const gameLabel = useMemo(() => gameName.split("-").join(" "), [gameName]);
 
   const loadGame = (name: string) => {
     setError("");
