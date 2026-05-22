@@ -1,0 +1,82 @@
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy import func, or_, select
+from sqlalchemy.orm import Session, joinedload
+
+from app.api.deps import require_admin
+from app.db.session import get_db
+from app.models import Comment, Favorite, Like, Post, User
+from app.schemas.post import PostCreate, PostDetail, PostRead, PostUpdate
+
+
+router = APIRouter(prefix="/posts", tags=["posts"])
+
+
+def with_counts(post: Post, db: Session) -> PostRead:
+    data = PostRead.model_validate(post)
+    data.likes_count = db.scalar(select(func.count(Like.id)).where(Like.post_id == post.id)) or 0
+    data.favorites_count = db.scalar(select(func.count(Favorite.id)).where(Favorite.post_id == post.id)) or 0
+    data.comments_count = db.scalar(select(func.count(Comment.id)).where(Comment.post_id == post.id)) or 0
+    return data
+
+
+@router.get("", response_model=list[PostRead])
+def list_posts(
+    q: str | None = Query(default=None, max_length=100),
+    include_drafts: bool = False,
+    db: Session = Depends(get_db),
+):
+    stmt = select(Post).order_by(Post.created_at.desc())
+    if not include_drafts:
+        stmt = stmt.where(Post.status == "published")
+    if q:
+        like_q = f"%{q}%"
+        stmt = stmt.where(or_(Post.title.like(like_q), Post.summary.like(like_q), Post.content.like(like_q)))
+    return [with_counts(post, db) for post in db.scalars(stmt).all()]
+
+
+@router.get("/{post_id}", response_model=PostDetail)
+def get_post(post_id: int, db: Session = Depends(get_db)):
+    post = db.scalar(select(Post).options(joinedload(Post.author)).where(Post.id == post_id))
+    if post is None or post.status != "published":
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
+    detail = PostDetail.model_validate(post)
+    detail.likes_count = db.scalar(select(func.count(Like.id)).where(Like.post_id == post.id)) or 0
+    detail.favorites_count = db.scalar(select(func.count(Favorite.id)).where(Favorite.post_id == post.id)) or 0
+    detail.comments_count = db.scalar(select(func.count(Comment.id)).where(Comment.post_id == post.id)) or 0
+    return detail
+
+
+@router.post("", response_model=PostRead, status_code=status.HTTP_201_CREATED)
+def create_post(payload: PostCreate, admin: User = Depends(require_admin), db: Session = Depends(get_db)):
+    post = Post(**payload.model_dump(), author_id=admin.id)
+    db.add(post)
+    db.commit()
+    db.refresh(post)
+    return with_counts(post, db)
+
+
+@router.put("/{post_id}", response_model=PostRead)
+def update_post(
+    post_id: int,
+    payload: PostUpdate,
+    _: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    post = db.get(Post, post_id)
+    if post is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(post, field, value)
+    db.commit()
+    db.refresh(post)
+    return with_counts(post, db)
+
+
+@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_post(post_id: int, _: User = Depends(require_admin), db: Session = Depends(get_db)):
+    post = db.get(Post, post_id)
+    if post is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
+    db.delete(post)
+    db.commit()
+    return None
