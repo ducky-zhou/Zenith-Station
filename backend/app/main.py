@@ -34,6 +34,20 @@ def health_check():
     return {"ok": True, "app": settings.app_name, "environment": settings.environment}
 
 
+@app.get("/api")
+@app.get("/api/")
+def api_index():
+    return {
+        "app": settings.app_name,
+        "message": "API is running. Use the links below to explore available endpoints.",
+        "docs": "/docs",
+        "health": "/api/health",
+        "posts": "/api/posts",
+        "profile": "/api/profile",
+        "security_games": "/api/security-games",
+    }
+
+
 app.include_router(auth.router, prefix="/api")
 app.include_router(posts.router, prefix="/api")
 app.include_router(comments.router, prefix="/api")
