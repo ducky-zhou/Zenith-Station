@@ -23,9 +23,9 @@ class Settings(BaseSettings):
 
     def validate_runtime_security(self) -> None:
         if self.environment == "production":
-            if self.secret_key == "change-this-to-a-long-random-secret":
+            if self.secret_key == "change-this-to-a-long-random-secret" or self.secret_key.startswith("replace-"):
                 raise RuntimeError("SECRET_KEY must be changed in production")
-            if self.admin_password == "ChangeMe123!":
+            if self.admin_password == "ChangeMe123!" or self.admin_password.startswith("replace-"):
                 raise RuntimeError("ADMIN_PASSWORD must be changed in production")
 
 
