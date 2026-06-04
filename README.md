@@ -46,9 +46,6 @@ npm run dev
 docker compose up -d --build
 ```
 
-## 默认账号
-
-开发环境可使用 `.env.example` 中的管理员信息。首次启动后请立刻修改默认密码和 `SECRET_KEY`。
 
 ## 文档
 
