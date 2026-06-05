@@ -9,6 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Deploy over SSH
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
@@ -23,5 +27,22 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+          git bundle create /tmp/zenith-station.bundle HEAD
+          scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy_key \
+            /tmp/zenith-station.bundle "$DEPLOY_USER@$DEPLOY_HOST:/tmp/zenith-station.bundle"
           ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" \
-            "cd '$DEPLOY_PATH' && git pull --ff-only && docker compose up -d --build"
+            "DEPLOY_PATH='$DEPLOY_PATH' bash -s" <<'EOF'
+          set -euo pipefail
+          cd "$DEPLOY_PATH"
+          if [ -n "$(git status --short)" ]; then
+            echo "Working tree is dirty; refusing to deploy."
+            git status --short
+            exit 1
+          fi
+          git branch "backup/deploy-$(date +%Y%m%d%H%M%S)" HEAD
+          git fetch /tmp/zenith-station.bundle main
+          git reset --hard FETCH_HEAD
+          docker compose up -d --build
+          docker compose ps
+          curl -fsS http://127.0.0.1/api/health
+          EOF
