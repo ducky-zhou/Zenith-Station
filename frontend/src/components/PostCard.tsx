@@ -1,4 +1,4 @@
-import { Bookmark, MessageCircle, ThumbsUp } from "lucide-react";
+import { Bookmark, Eye, MessageCircle, ThumbsUp } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import type { Post } from "../types";
@@ -17,15 +17,26 @@ export function PostCard({ post }: { post: Post }) {
         <p>{post.summary}</p>
       </div>
       <div className="post-meta">
-        <span>#web-sec</span>
-        <span>
-          <ThumbsUp aria-hidden="true" /> {post.likes_count}
+        <span className="metric-row">
+          <span>
+            <Eye aria-hidden="true" /> heat
+          </span>
+          <strong>{post.likes_count + post.favorites_count + post.comments_count}</strong>
         </span>
-        <span>
+        <span className="metric-row">
+          <span>
+            <ThumbsUp aria-hidden="true" /> likes
+          </span>
+          <strong>{post.likes_count}</strong>
+        </span>
+        <span className="metric-row">
+          <span>
+            <MessageCircle aria-hidden="true" /> comments
+          </span>
+          <strong>{post.comments_count}</strong>
+        </span>
+        <span className="metric-chip">
           <Bookmark aria-hidden="true" /> {post.favorites_count}
-        </span>
-        <span>
-          <MessageCircle aria-hidden="true" /> {post.comments_count}
         </span>
       </div>
     </article>
