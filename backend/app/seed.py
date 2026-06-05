@@ -74,11 +74,11 @@ def ensure_seed_data() -> None:
             db.add(
                 Profile(
                     id=1,
-                    name="信息安全学习者",
-                    bio="这里是我的个人博客，用来记录 Web 开发、信息安全、AI 工具和项目实践。",
+                    name="Ducky Zhou",
+                    bio="记录 Web 开发、信息安全、AI 自动化和个人项目实践。",
                     interests="Web 安全、漏洞分析、AI 自动化、全栈开发、CTF",
-                    experiences="正在从 0 到 1 搭建一个带安全特色的个人博客。",
-                    github_url="https://github.com/your-name",
+                    experiences="持续搭建和打磨一个带信息安全特色的个人博客。",
+                    github_url="https://github.com/ducky-zhou",
                     email=settings.admin_email,
                 )
             )

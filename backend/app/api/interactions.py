@@ -6,7 +6,7 @@ from app.api.deps import get_current_user
 from app.db.session import get_db
 from app.models import Favorite, Like, Post, User
 from app.schemas.post import PostRead
-from app.api.posts import with_counts
+from app.api.posts import with_counts_many
 
 
 router = APIRouter(tags=["interactions"])
@@ -68,4 +68,4 @@ def unfavorite_post(post_id: int, current_user: User = Depends(get_current_user)
 @router.get("/me/favorites", response_model=list[PostRead])
 def my_favorites(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     stmt = select(Post).join(Favorite).where(Favorite.user_id == current_user.id).order_by(Favorite.created_at.desc())
-    return [with_counts(post, db) for post in db.scalars(stmt).all()]
+    return with_counts_many(list(db.scalars(stmt).all()), db)

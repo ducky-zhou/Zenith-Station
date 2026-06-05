@@ -60,6 +60,8 @@ www  A    你的服务器公网 IP
 
 生产环境建议使用 HTTPS，可通过云厂商证书、Certbot 或反向代理网关配置。
 
+备案期间可先通过服务器公网 IP 临时访问；安全组建议只保留临时访问需要的 Web 端口，SSH 端口限制为本人 IP，Linux 实例不需要开放 RDP 3389。
+
 ## CI/CD
 
 当前已提供 `.github/workflows/ci.yml`：

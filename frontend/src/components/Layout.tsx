@@ -37,10 +37,16 @@ export function Layout() {
             </NavLink>
           )}
           {isAdmin && (
-            <NavLink to="/admin/posts" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-              <Lock aria-hidden="true" />
-              <span>后台</span>
-            </NavLink>
+            <>
+              <NavLink to="/admin/posts" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+                <Lock aria-hidden="true" />
+                <span>文章后台</span>
+              </NavLink>
+              <NavLink to="/admin/profile" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+                <UserRound aria-hidden="true" />
+                <span>资料后台</span>
+              </NavLink>
+            </>
           )}
         </nav>
         <div className="sidebar-footer">

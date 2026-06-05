@@ -51,14 +51,21 @@ def submit_game(
     if not payload.answers:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No answers submitted")
     answer_map = {item.question_id: item.answer for item in payload.answers}
+    if len(answer_map) != len(payload.answers):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Duplicate answers submitted")
+
     questions = db.scalars(
-        select(SecurityGameQuestion).where(
-            SecurityGameQuestion.game_name == game_name,
-            SecurityGameQuestion.id.in_(answer_map.keys()),
-        )
+        select(SecurityGameQuestion)
+        .where(SecurityGameQuestion.game_name == game_name)
+        .order_by(SecurityGameQuestion.id)
     ).all()
     if not questions:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Questions not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Game not found")
+
+    question_ids = {question.id for question in questions}
+    submitted_ids = set(answer_map)
+    if submitted_ids != question_ids:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="All questions must be answered")
 
     details: list[SecurityGameResultItem] = []
     correct_count = 0

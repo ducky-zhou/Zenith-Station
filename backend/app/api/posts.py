@@ -11,12 +11,34 @@ from app.schemas.post import PostCreate, PostDetail, PostRead, PostUpdate
 router = APIRouter(prefix="/posts", tags=["posts"])
 
 
+def count_by_post(db: Session, model: type[Comment] | type[Favorite] | type[Like], post_ids: list[int]) -> dict[int, int]:
+    if not post_ids:
+        return {}
+    rows = db.execute(
+        select(model.post_id, func.count(model.id))
+        .where(model.post_id.in_(post_ids))
+        .group_by(model.post_id)
+    ).all()
+    return {post_id: count for post_id, count in rows}
+
+
+def with_counts_many(posts: list[Post], db: Session) -> list[PostRead]:
+    post_ids = [post.id for post in posts]
+    likes = count_by_post(db, Like, post_ids)
+    favorites = count_by_post(db, Favorite, post_ids)
+    comments = count_by_post(db, Comment, post_ids)
+    result: list[PostRead] = []
+    for post in posts:
+        data = PostRead.model_validate(post)
+        data.likes_count = likes.get(post.id, 0)
+        data.favorites_count = favorites.get(post.id, 0)
+        data.comments_count = comments.get(post.id, 0)
+        result.append(data)
+    return result
+
+
 def with_counts(post: Post, db: Session) -> PostRead:
-    data = PostRead.model_validate(post)
-    data.likes_count = db.scalar(select(func.count(Like.id)).where(Like.post_id == post.id)) or 0
-    data.favorites_count = db.scalar(select(func.count(Favorite.id)).where(Favorite.post_id == post.id)) or 0
-    data.comments_count = db.scalar(select(func.count(Comment.id)).where(Comment.post_id == post.id)) or 0
-    return data
+    return with_counts_many([post], db)[0]
 
 
 @router.get("", response_model=list[PostRead])
@@ -34,7 +56,7 @@ def list_posts(
     if q:
         like_q = f"%{q}%"
         stmt = stmt.where(or_(Post.title.like(like_q), Post.summary.like(like_q), Post.content.like(like_q)))
-    return [with_counts(post, db) for post in db.scalars(stmt).all()]
+    return with_counts_many(list(db.scalars(stmt).all()), db)
 
 
 @router.get("/{post_id}", response_model=PostDetail)

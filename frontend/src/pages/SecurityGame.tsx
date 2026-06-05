@@ -16,6 +16,7 @@ export function SecurityGame() {
   const [leaderboard, setLeaderboard] = useState<ScoreRow[]>([]);
   const [startedAt, setStartedAt] = useState(Date.now());
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const gameLabel = useMemo(() => gameName.split("-").join(" "), [gameName]);
 
@@ -47,11 +48,23 @@ export function SecurityGame() {
       setError("登录后可以提交成绩。");
       return;
     }
+    if (questions.length === 0 || Object.keys(answers).length !== questions.length) {
+      setError("请先完成所有题目再提交成绩。");
+      return;
+    }
+    setError("");
+    setSubmitting(true);
     const payload = Object.entries(answers).map(([question_id, answer]) => ({ question_id: Number(question_id), answer }));
     const duration = Math.round((Date.now() - startedAt) / 1000);
-    const data = await api.submitGame(gameName, payload, duration);
-    setResult(data);
-    setLeaderboard(await api.leaderboard(gameName));
+    try {
+      const data = await api.submitGame(gameName, payload, duration);
+      setResult(data);
+      setLeaderboard(await api.leaderboard(gameName));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "提交失败");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -105,8 +118,8 @@ export function SecurityGame() {
           </div>
         ))}
       </div>
-      <button className="primary-button wide" onClick={submit} type="button">
-        提交成绩
+      <button className="primary-button wide" onClick={submit} type="button" disabled={submitting || questions.length === 0}>
+        {submitting ? "提交中..." : "提交成绩"}
       </button>
       {result && (
         <div className="result-band">
