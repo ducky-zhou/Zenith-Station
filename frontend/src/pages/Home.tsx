@@ -52,8 +52,8 @@ export function Home() {
                       <ShieldCheck aria-hidden="true" />
                       Web & Security Lab
                     </div>
-                    <h1>{profile?.name ?? "Security Personal Blog"}</h1>
-                    <p>{profile?.bio ?? "记录 Web 开发、信息安全和 AI 自动化实践。"}</p>
+                    <h1>Security Notes & Builds</h1>
+                    <p>Notes on web development, security practice, AI tooling, and side projects.</p>
                   </div>
                 </div>
                 <div className="terminal-line muted">$ cat interests.txt</div>
@@ -66,10 +66,10 @@ export function Home() {
                 <div className="terminal-line muted">$ ./enter_lab --mode reader</div>
                 <div className="hero-actions">
                   <Link to="/posts" className="primary-button">
-                    读文章 <ArrowRight aria-hidden="true" />
+                    Explore Notes <ArrowRight aria-hidden="true" />
                   </Link>
                   <Link to="/security-game" className="secondary-button">
-                    安全闯关
+                    Enter Lab
                   </Link>
                 </div>
               </div>
