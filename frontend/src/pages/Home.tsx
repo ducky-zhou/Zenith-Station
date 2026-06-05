@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, ShieldCheck, Terminal, UserRound } from "lucide-react";
+import { ArrowRight, Bot, ShieldCheck, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -26,66 +26,68 @@ export function Home() {
 
   return (
     <section className="page-stack">
-      <div className="hero-band">
-        <div className="terminal-window">
-          <div className="terminal-topbar">
-            <span />
-            <span />
-            <span />
-            <strong>~/secblog/lab</strong>
-          </div>
-          <div className="terminal-body">
-            <div className="terminal-line muted">$ whoami</div>
-            <div className="terminal-identity">
-              <div className="hero-profile">
-                {profile?.avatar_url ? (
-                  <img src={profile.avatar_url} alt={profile.name} />
-                ) : (
-                  <UserRound aria-hidden="true" />
-                )}
-              </div>
-              <div>
-                <div className="eyebrow">
-                  <ShieldCheck aria-hidden="true" />
-                  Web & Security Lab
-                </div>
-                <h1>{profile?.name ?? "Security Personal Blog"}</h1>
-                <p>{profile?.bio ?? "记录 Web 开发、信息安全和 AI 自动化实践。"}</p>
-              </div>
-            </div>
-            <div className="terminal-line muted">$ cat interests.txt</div>
-            <div className="terminal-tags">
-              <span>Web Dev</span>
-              <span>CTF</span>
-              <span>AI Tools</span>
-              <span>Projects</span>
-            </div>
-            <div className="terminal-line muted">$ ./enter_lab --mode reader</div>
-            <div className="hero-actions">
-              <Link to="/posts" className="primary-button">
-                读文章 <ArrowRight aria-hidden="true" />
-              </Link>
-              <Link to="/security-game" className="secondary-button">
-                安全闯关
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
       {error && <StatusMessage tone="error" message={error} />}
-      <section className="home-grid">
-        <div>
-          <div className="section-heading">
-            <h2>最近文章</h2>
-            <Link to="/posts">全部文章</Link>
+      <div className="main-home-grid">
+        <div className="home-main-column">
+          <div className="hero-band">
+            <div className="terminal-window">
+              <div className="terminal-topbar">
+                <span />
+                <span />
+                <span />
+                <strong>~/secblog/lab</strong>
+              </div>
+              <div className="terminal-body">
+                <div className="terminal-line muted">$ whoami</div>
+                <div className="terminal-identity">
+                  <div className="hero-profile">
+                    {profile?.avatar_url ? (
+                      <img src={profile.avatar_url} alt={profile.name} />
+                    ) : (
+                      <UserRound aria-hidden="true" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="eyebrow">
+                      <ShieldCheck aria-hidden="true" />
+                      Web & Security Lab
+                    </div>
+                    <h1>{profile?.name ?? "Security Personal Blog"}</h1>
+                    <p>{profile?.bio ?? "记录 Web 开发、信息安全和 AI 自动化实践。"}</p>
+                  </div>
+                </div>
+                <div className="terminal-line muted">$ cat interests.txt</div>
+                <div className="terminal-tags">
+                  <span>Web Dev</span>
+                  <span>CTF</span>
+                  <span>AI Tools</span>
+                  <span>Projects</span>
+                </div>
+                <div className="terminal-line muted">$ ./enter_lab --mode reader</div>
+                <div className="hero-actions">
+                  <Link to="/posts" className="primary-button">
+                    读文章 <ArrowRight aria-hidden="true" />
+                  </Link>
+                  <Link to="/security-game" className="secondary-button">
+                    安全闯关
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="post-grid compact-list">
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
+          <section>
+            <div className="section-heading">
+              <h2>最近文章</h2>
+              <Link to="/posts">全部文章</Link>
+            </div>
+            <div className="post-grid compact-list">
+              {posts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          </section>
         </div>
-        <aside className="side-stack">
+        <aside className="home-aside-column side-stack">
           <section className="info-panel terminal-panel status-panel">
             <h2>Status</h2>
             <dl>
@@ -172,7 +174,7 @@ export function Home() {
             </Link>
           </section>
         </aside>
-      </section>
+      </div>
     </section>
   );
 }
