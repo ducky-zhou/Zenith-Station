@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Gamepad2, Home, Lock, LogOut, Shield, UserRound } from "lucide-react";
+import { BarChart3, BookOpen, Gamepad2, Github, Globe2, Home, Lock, LogOut, Mail, Rss, Shield, UserRound } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import { useAuth } from "../auth";
@@ -54,6 +54,24 @@ export function Layout() {
           )}
         </nav>
         <div className="sidebar-footer">
+          <div className="operator-card">
+            <strong>duck@secblog</strong>
+            <span>ZJU · InfoSec Student</span>
+            <div className="operator-links">
+              <a href="https://github.com/ducky-zhou" target="_blank" rel="noreferrer" title="GitHub">
+                <Github aria-hidden="true" />
+              </a>
+              <a href="mailto:admin@example.com" title="Email">
+                <Mail aria-hidden="true" />
+              </a>
+              <a href="/rss.xml" title="RSS">
+                <Rss aria-hidden="true" />
+              </a>
+              <a href="/" title="Site">
+                <Globe2 aria-hidden="true" />
+              </a>
+            </div>
+          </div>
           {user ? (
             <>
               <div className="user-chip">
@@ -71,10 +89,18 @@ export function Layout() {
               <span>登录</span>
             </NavLink>
           )}
+          <div className="terminal-ready">
+            <span>&gt; terminal ready</span>
+            <i aria-hidden="true" />
+          </div>
         </div>
       </aside>
       <main className="content">
         <Outlet />
+        <footer className="app-footer">
+          <span>[The quieter you become, the more you are able to hear.]</span>
+          <strong>SecBlog v1.0.0</strong>
+        </footer>
       </main>
     </div>
   );

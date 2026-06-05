@@ -17,25 +17,16 @@ export function PostCard({ post }: { post: Post }) {
         <p>{post.summary}</p>
       </div>
       <div className="post-meta">
-        <span className="metric-row">
-          <span>
-            <Eye aria-hidden="true" /> heat
-          </span>
-          <strong>{post.likes_count + post.favorites_count + post.comments_count}</strong>
+        <span title="热度">
+          <Eye aria-hidden="true" /> {post.likes_count + post.favorites_count + post.comments_count}
         </span>
-        <span className="metric-row">
-          <span>
-            <ThumbsUp aria-hidden="true" /> likes
-          </span>
-          <strong>{post.likes_count}</strong>
+        <span title="点赞">
+          <ThumbsUp aria-hidden="true" /> {post.likes_count}
         </span>
-        <span className="metric-row">
-          <span>
-            <MessageCircle aria-hidden="true" /> comments
-          </span>
-          <strong>{post.comments_count}</strong>
+        <span title="评论">
+          <MessageCircle aria-hidden="true" /> {post.comments_count}
         </span>
-        <span className="metric-chip">
+        <span title="收藏">
           <Bookmark aria-hidden="true" /> {post.favorites_count}
         </span>
       </div>
