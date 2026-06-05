@@ -1,4 +1,4 @@
-import { BookOpen, Gamepad2, Home, Lock, LogOut, Shield, UserRound } from "lucide-react";
+import { BarChart3, BookOpen, Gamepad2, Home, Lock, LogOut, Shield, UserRound } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import { useAuth } from "../auth";
@@ -45,6 +45,10 @@ export function Layout() {
               <NavLink to="/admin/profile" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
                 <UserRound aria-hidden="true" />
                 <span>资料后台</span>
+              </NavLink>
+              <NavLink to="/admin/stats" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+                <BarChart3 aria-hidden="true" />
+                <span>数据统计</span>
               </NavLink>
             </>
           )}

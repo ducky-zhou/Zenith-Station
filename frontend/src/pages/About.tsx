@@ -20,9 +20,13 @@ export function About() {
   return (
     <section className="page-stack">
       <div className="profile-header">
-        <div className="avatar-placeholder">
-          <Shield aria-hidden="true" />
-        </div>
+        {profile.avatar_url ? (
+          <img className="profile-avatar" src={profile.avatar_url} alt={profile.name} />
+        ) : (
+          <div className="avatar-placeholder">
+            <Shield aria-hidden="true" />
+          </div>
+        )}
         <div>
           <h1>{profile.name}</h1>
           <p>{profile.bio}</p>

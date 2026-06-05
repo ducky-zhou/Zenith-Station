@@ -44,3 +44,37 @@ def test_security_game_requires_all_answers():
         )
     assert response.status_code == 400
     assert response.json()["detail"] == "All questions must be answered"
+
+
+def test_github_login_is_disabled_without_config():
+    with TestClient(app) as client:
+        response = client.get("/api/auth/github/enabled")
+    assert response.status_code == 200
+    assert response.json() == {"enabled": False}
+
+
+def test_admin_stats_are_available():
+    with TestClient(app) as client:
+        login = client.post(
+            "/api/auth/login",
+            json={"email": "admin@example.com", "password": "ChangeMe123!"},
+        )
+        token = login.json()["access_token"]
+        response = client.get("/api/stats", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 200
+    assert "metrics" in response.json()
+
+
+def test_avatar_upload_rejects_non_image():
+    with TestClient(app) as client:
+        login = client.post(
+            "/api/auth/login",
+            json={"email": "admin@example.com", "password": "ChangeMe123!"},
+        )
+        token = login.json()["access_token"]
+        response = client.post(
+            "/api/profile/avatar",
+            headers={"Authorization": f"Bearer {token}"},
+            files={"file": ("avatar.txt", b"not an image", "text/plain")},
+        )
+    assert response.status_code == 400

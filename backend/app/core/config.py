@@ -14,6 +14,11 @@ class Settings(BaseSettings):
     admin_email: str = "admin@example.com"
     admin_username: str = "admin"
     admin_password: str = "ChangeMe123!"
+    upload_dir: str = "uploads"
+    frontend_base_url: str = "http://localhost:5173"
+    github_client_id: str = ""
+    github_client_secret: str = ""
+    github_redirect_uri: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

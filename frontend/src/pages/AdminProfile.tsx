@@ -22,6 +22,7 @@ export function AdminProfile() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     api
@@ -74,6 +75,22 @@ export function AdminProfile() {
     }
   };
 
+  const uploadAvatar = async (file: File | undefined) => {
+    if (!file) return;
+    setError("");
+    setMessage("");
+    setUploading(true);
+    try {
+      const profile = await api.uploadProfileAvatar(file);
+      setForm((current) => ({ ...current, avatar_url: profile.avatar_url ?? "" }));
+      setMessage("头像已上传。");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "上传失败");
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <section className="page-stack readable">
       <div className="section-heading">
@@ -82,6 +99,22 @@ export function AdminProfile() {
       {error && <StatusMessage tone="error" message={error} />}
       {message && <StatusMessage tone="success" message={message} />}
       <form className="editor-form" onSubmit={save}>
+        <div className="avatar-editor">
+          {form.avatar_url ? (
+            <img src={form.avatar_url} alt={form.name || "头像"} />
+          ) : (
+            <div className="avatar-placeholder small">头像</div>
+          )}
+          <label>
+            上传头像
+            <input
+              type="file"
+              accept="image/png,image/jpeg,image/webp,image/gif"
+              onChange={(event) => uploadAvatar(event.target.files?.[0])}
+              disabled={uploading}
+            />
+          </label>
+        </div>
         <label>
           名称
           <input value={form.name} onChange={(event) => update("name", event.target.value)} required />

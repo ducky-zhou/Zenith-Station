@@ -27,6 +27,22 @@ npm run dev
 - `ADMIN_PASSWORD`
 - `POSTGRES_PASSWORD`
 - `CORS_ORIGINS`
+- `FRONTEND_BASE_URL`
+
+如需启用 GitHub 登录，还需要在 GitHub OAuth App 中配置回调地址：
+
+```text
+http://服务器公网IP/api/auth/github/callback
+```
+
+并在 `.env` 中配置：
+
+```text
+FRONTEND_BASE_URL=http://服务器公网IP
+GITHUB_CLIENT_ID=你的 GitHub OAuth Client ID
+GITHUB_CLIENT_SECRET=你的 GitHub OAuth Client Secret
+GITHUB_REDIRECT_URI=http://服务器公网IP/api/auth/github/callback
+```
 
 启动：
 
@@ -61,6 +77,17 @@ www  A    你的服务器公网 IP
 生产环境建议使用 HTTPS，可通过云厂商证书、Certbot 或反向代理网关配置。
 
 备案期间可先通过服务器公网 IP 临时访问；安全组建议只保留临时访问需要的 Web 端口，SSH 端口限制为本人 IP，Linux 实例不需要开放 RDP 3389。
+
+## 缓存与 CDN
+
+当前前端容器对 Vite 生成的 `/assets/` 静态资源设置了 30 天 immutable 缓存，上传头像通过 `/uploads/` 暴露并缓存 7 天。备案和 HTTPS 完成后，可以将阿里云 CDN 或 Cloudflare 的源站指向服务器公网 IP，并缓存以下路径：
+
+```text
+/assets/*
+/uploads/*
+```
+
+API 路径 `/api/*` 不应做 CDN 缓存。
 
 ## CI/CD
 

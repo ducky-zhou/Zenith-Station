@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -26,6 +26,13 @@ export function Home() {
     <section className="page-stack">
       <div className="hero-band">
         <div>
+          <div className="hero-profile">
+            {profile?.avatar_url ? (
+              <img src={profile.avatar_url} alt={profile.name} />
+            ) : (
+              <UserRound aria-hidden="true" />
+            )}
+          </div>
           <div className="eyebrow">
             <ShieldCheck aria-hidden="true" />
             信息安全 · 全栈博客

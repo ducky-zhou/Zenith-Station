@@ -13,6 +13,7 @@
 - 生产环境禁止使用默认 `SECRET_KEY` 和默认管理员密码
 - React Markdown 不启用原始 HTML 渲染，降低 XSS 风险
 - Nginx 添加基础安全响应头
+- 前端构建产物使用哈希文件名并设置静态缓存，API 不进入 CDN 缓存
 - `.env`、数据库文件、缓存文件不进入 Git
 
 ## 仍需上线前处理
@@ -20,6 +21,7 @@
 - 修改 `docker-compose.yml` 中所有默认密码
 - 备案完成后配置 HTTPS
 - 将 `CORS_ORIGINS` 改成真实域名
+- GitHub OAuth Client Secret 只写入服务器 `.env`，不要提交到 Git
 - 云服务器安全组只开放必要端口：临时访问保留 80，SSH 22 限制为本人 IP，删除 Linux 不需要的 RDP 3389
 - 数据库密码使用强随机值
 - 定期备份 PostgreSQL 数据卷

@@ -80,3 +80,20 @@ export type ScoreRow = {
   duration_seconds: number;
   created_at: string;
 };
+
+export type PostStat = {
+  id: number;
+  title: string;
+  views: number;
+  likes_count: number;
+  favorites_count: number;
+  comments_count: number;
+};
+
+export type Stats = {
+  metrics: Array<{ label: string; value: number }>;
+  top_viewed_posts: PostStat[];
+  top_liked_posts: PostStat[];
+  top_commented_posts: PostStat[];
+  top_favorited_posts: PostStat[];
+};

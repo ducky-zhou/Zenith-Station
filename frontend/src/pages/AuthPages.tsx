@@ -1,6 +1,8 @@
-import { FormEvent, useState } from "react";
+import { Github } from "lucide-react";
+import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { API_BASE, api } from "../api/client";
 import { useAuth } from "../auth";
 import { StatusMessage } from "../components/StatusMessage";
 
@@ -10,6 +12,11 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [githubEnabled, setGithubEnabled] = useState(false);
+
+  useEffect(() => {
+    api.githubEnabled().then((data) => setGithubEnabled(data.enabled)).catch(() => undefined);
+  }, []);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -37,6 +44,12 @@ export function Login() {
         </label>
         <button type="submit">登录</button>
       </form>
+      {githubEnabled && (
+        <a className="icon-text-button oauth-button" href={`${API_BASE}/auth/github/start`}>
+          <Github aria-hidden="true" />
+          <span>使用 GitHub 登录</span>
+        </a>
+      )}
       <p>
         没有账号？<Link to="/register">注册</Link>
       </p>

@@ -8,6 +8,7 @@ type AuthContextValue = {
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
+  refreshUser: () => Promise<void>;
   logout: () => void;
 };
 
@@ -29,6 +30,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const data = await api.register(username, email, password);
         storeSession(data.access_token, data.user);
         setUser(data.user);
+      },
+      async refreshUser() {
+        const data = await api.me();
+        storeSession(localStorage.getItem("security_blog_token") ?? "", data);
+        setUser(data);
       },
       logout() {
         clearSession();

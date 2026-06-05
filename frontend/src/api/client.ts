@@ -1,6 +1,7 @@
-import type { Comment, Post, Profile, ScoreRow, SecurityGameResult, SecurityQuestion, TokenResponse, User } from "../types";
+import type { Comment, Post, Profile, ScoreRow, SecurityGameResult, SecurityQuestion, Stats, TokenResponse, User } from "../types";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "/api";
+export { API_BASE };
 const TOKEN_KEY = "security_blog_token";
 const USER_KEY = "security_blog_user";
 
@@ -35,7 +36,7 @@ export function clearSession() {
 
 async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const headers = new Headers(options.headers);
-  if (!headers.has("Content-Type") && options.body) {
+  if (!headers.has("Content-Type") && options.body && !(options.body instanceof FormData)) {
     headers.set("Content-Type", "application/json");
   }
   if (options.auth !== false) {
@@ -79,9 +80,15 @@ export const api = {
       auth: false
     }),
   me: () => request<User>("/auth/me"),
+  githubEnabled: () => request<{ enabled: boolean }>("/auth/github/enabled", { auth: false }),
   profile: () => request<Profile>("/profile", { auth: false }),
   updateProfile: (payload: Partial<Profile>) =>
     request<Profile>("/profile", { method: "PUT", body: JSON.stringify(payload) }),
+  uploadProfileAvatar: (file: File) => {
+    const body = new FormData();
+    body.set("file", file);
+    return request<Profile>("/profile/avatar", { method: "POST", body });
+  },
   posts: (query = "", includeDrafts = false) => {
     const params = new URLSearchParams();
     if (query) params.set("q", query);
@@ -111,6 +118,7 @@ export const api = {
       body: JSON.stringify({ answers, duration_seconds })
     }),
   leaderboard: (gameName: string) => request<ScoreRow[]>(`/security-games/${gameName}/leaderboard`, { auth: false }),
+  stats: () => request<Stats>("/stats"),
   track: (event: string, path: string, extra: Record<string, unknown> = {}) =>
     request<{ ok: boolean }>("/track", {
       method: "POST",

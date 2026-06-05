@@ -1,14 +1,17 @@
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
-from app.api import auth, comments, events, interactions, posts, profile, security_games
+from app.api import auth, comments, events, interactions, posts, profile, security_games, stats
 from app.core.config import get_settings
 from app.seed import ensure_seed_data
 
 
 settings = get_settings()
+Path(settings.upload_dir).mkdir(parents=True, exist_ok=True)
 
 
 @asynccontextmanager
@@ -19,6 +22,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
+app.mount("/uploads", StaticFiles(directory=settings.upload_dir), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,
@@ -55,3 +59,4 @@ app.include_router(interactions.router, prefix="/api")
 app.include_router(profile.router, prefix="/api")
 app.include_router(events.router, prefix="/api")
 app.include_router(security_games.router, prefix="/api")
+app.include_router(stats.router, prefix="/api")
