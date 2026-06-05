@@ -18,7 +18,7 @@ export function Layout() {
       <aside className="sidebar">
         <NavLink to="/" className="brand">
           <Shield aria-hidden="true" />
-          <span>SecBlog</span>
+          <span>duck@secblog</span>
         </NavLink>
         <nav className="nav-list">
           {navItems.map((item) => {
