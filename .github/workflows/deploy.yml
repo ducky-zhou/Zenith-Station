@@ -20,14 +20,23 @@ jobs:
           DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          test -n "$DEPLOY_HOST"
-          test -n "$DEPLOY_USER"
-          test -n "$DEPLOY_KEY"
-          test -n "$DEPLOY_PATH"
+          set -euo pipefail
+
+          missing=0
+          for name in DEPLOY_HOST DEPLOY_USER DEPLOY_KEY DEPLOY_PATH; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error title=Missing deploy secret::$name is not configured in repository Actions secrets."
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
           mkdir -p ~/.ssh
           printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          git bundle create /tmp/zenith-station.bundle HEAD
+          git bundle create /tmp/zenith-station.bundle HEAD main
           scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy_key \
             /tmp/zenith-station.bundle "$DEPLOY_USER@$DEPLOY_HOST:/tmp/zenith-station.bundle"
           ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" \
