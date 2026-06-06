@@ -19,6 +19,17 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 settings = get_settings()
 
 
+def frontend_base_url(request: Request) -> str:
+    configured = settings.frontend_base_url.rstrip("/")
+    if configured and "localhost" not in configured and "127.0.0.1" not in configured:
+        return configured
+    host = request.headers.get("x-forwarded-host") or request.headers.get("host")
+    proto = request.headers.get("x-forwarded-proto") or request.url.scheme
+    if host:
+        return f"{proto}://{host}"
+    return configured or "http://localhost"
+
+
 @router.post("/register", response_model=TokenRead, status_code=status.HTTP_201_CREATED)
 def register(payload: UserCreate, db: Session = Depends(get_db)):
     exists = db.scalar(select(User).where(or_(User.email == payload.email, User.username == payload.username)))
@@ -88,35 +99,39 @@ async def github_callback(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid OAuth state")
 
     redirect_uri = settings.github_redirect_uri or str(request.url_for("github_callback"))
-    async with httpx.AsyncClient(timeout=10) as client:
-        token_response = await client.post(
-            "https://github.com/login/oauth/access_token",
-            headers={"Accept": "application/json"},
-            data={
-                "client_id": settings.github_client_id,
-                "client_secret": settings.github_client_secret,
-                "code": code,
-                "redirect_uri": redirect_uri,
-            },
-        )
-        token_data = token_response.json()
-        github_token = token_data.get("access_token")
-        if not github_token:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="GitHub authorization failed")
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            token_response = await client.post(
+                "https://github.com/login/oauth/access_token",
+                headers={"Accept": "application/json"},
+                data={
+                    "client_id": settings.github_client_id,
+                    "client_secret": settings.github_client_secret,
+                    "code": code,
+                    "redirect_uri": redirect_uri,
+                },
+            )
+            token_data = token_response.json()
+            github_token = token_data.get("access_token")
+            if not github_token:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="GitHub authorization failed")
 
-        headers = {"Authorization": f"Bearer {github_token}", "Accept": "application/vnd.github+json"}
-        user_response = await client.get("https://api.github.com/user", headers=headers)
-        user_response.raise_for_status()
-        github_user = user_response.json()
-        email = github_user.get("email")
-        if not email:
-            emails_response = await client.get("https://api.github.com/user/emails", headers=headers)
-            emails_response.raise_for_status()
-            emails = emails_response.json()
-            primary = next((item for item in emails if item.get("primary") and item.get("verified")), None)
-            email = primary.get("email") if primary else None
-        if not email:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="GitHub account has no verified email")
+            headers = {"Authorization": f"Bearer {github_token}", "Accept": "application/vnd.github+json"}
+            user_response = await client.get("https://api.github.com/user", headers=headers)
+            user_response.raise_for_status()
+            github_user = user_response.json()
+            email = github_user.get("email")
+            if not email:
+                emails_response = await client.get("https://api.github.com/user/emails", headers=headers)
+                emails_response.raise_for_status()
+                emails = emails_response.json()
+                primary = next((item for item in emails if item.get("primary") and item.get("verified")), None)
+                email = primary.get("email") if primary else None
+    except httpx.HTTPError as exc:
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="GitHub authorization service is unavailable") from exc
+
+    if not email:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="GitHub account has no verified email")
 
     username_base = (github_user.get("login") or email.split("@", 1)[0])[:45]
     user = db.scalar(select(User).where(User.email == email))
@@ -140,6 +155,6 @@ async def github_callback(
     db.refresh(user)
 
     token = create_access_token(str(user.id), {"role": user.role})
-    response = RedirectResponse(f"{settings.frontend_base_url.rstrip('/')}/oauth/callback?token={token}")
+    response = RedirectResponse(f"{frontend_base_url(request)}/oauth/callback?token={token}")
     response.delete_cookie("github_oauth_state")
     return response

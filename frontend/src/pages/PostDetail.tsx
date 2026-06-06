@@ -2,6 +2,7 @@ import { Bookmark, Bot, MessageCircle, ThumbsUp } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
+import remarkGfm from "remark-gfm";
 
 import { api } from "../api/client";
 import { useAuth } from "../auth";
@@ -103,7 +104,7 @@ export function PostDetail() {
         </div>
       </header>
       <div className="article-content">
-        <ReactMarkdown>{post.content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
       </div>
       <section className="ai-summary-panel">
         <div className="ai-summary-head">
@@ -115,7 +116,7 @@ export function PostDetail() {
         {aiSummaryLoading ? (
           <p>DeepSeek 正在整理这篇文章...</p>
         ) : aiSummary ? (
-          <ReactMarkdown>{aiSummary}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{aiSummary}</ReactMarkdown>
         ) : (
           <p>{aiSummaryError ? `暂时无法生成摘要：${aiSummaryError}` : "暂无 AI 摘要。"}</p>
         )}

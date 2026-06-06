@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from app.core.config import get_settings
 from app.core.security import hash_password
-from app.db.session import SessionLocal, init_db
+from app.db.session import SessionLocal, ensure_schema_compatibility, init_db
 from app.models import Post, Profile, SecurityGameQuestion, User
 
 
@@ -266,6 +266,7 @@ GitHub 上搜索 [Awesome LLM Security](https://github.com/search?q=Awesome+LLM+
 
 def ensure_seed_data() -> None:
     init_db()
+    ensure_schema_compatibility()
     settings = get_settings()
     db = SessionLocal()
     try:

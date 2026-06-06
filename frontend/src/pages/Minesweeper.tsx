@@ -306,11 +306,6 @@ export function Minesweeper() {
           <span>
             <Bomb aria-hidden="true" /> Minesweeper
           </span>
-          <div className="winmine-controls" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-          </div>
         </div>
 
         <div className="winmine-menu" aria-label="difficulty">
