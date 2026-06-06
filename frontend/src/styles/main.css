@@ -1140,6 +1140,336 @@ a.leaderboard-row:hover {
   color: var(--accent);
 }
 
+.security-lab-page {
+  max-width: 1180px;
+}
+
+.security-lab-hero,
+.mission-select-card,
+.score-panel,
+.security-lab-page .incident-card,
+.security-lab-page .lab-leaderboard {
+  background: rgba(13, 27, 47, 0.92);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.security-lab-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+  align-items: stretch;
+  padding: 22px;
+  background:
+    linear-gradient(90deg, rgba(0, 212, 255, 0.06), transparent 38%),
+    rgba(13, 27, 47, 0.92);
+}
+
+.security-lab-copy {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.lab-eyebrow,
+.current-mission span,
+.mission-select-card p,
+.score-grid span,
+.lab-leaderboard-head,
+.incident-head {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.lab-eyebrow {
+  width: fit-content;
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.security-lab-copy h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.security-lab-copy p,
+.mission-select-card p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.security-lab-copy p {
+  font-size: 1.05rem;
+}
+
+.current-mission {
+  display: grid;
+  grid-template-columns: max-content minmax(0, max-content) minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 2px;
+  padding: 9px 11px;
+  background: rgba(18, 38, 66, 0.64);
+  border: 1px solid rgba(0, 212, 255, 0.18);
+  border-radius: var(--radius);
+}
+
+.current-mission span,
+.current-mission small {
+  color: var(--text-muted);
+}
+
+.current-mission strong {
+  min-width: 0;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.current-mission small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission-select-card {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 16px;
+  background: rgba(8, 20, 36, 0.72);
+}
+
+.mission-select-card select {
+  width: min(100%, 260px);
+  min-height: 40px;
+  color: var(--text);
+  background: rgba(18, 38, 66, 0.78);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 10px;
+}
+
+.mission-select-card select:focus {
+  outline: 2px solid rgba(0, 212, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.55);
+}
+
+.mission-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mission-chip-grid span {
+  padding: 5px 8px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  background: rgba(18, 38, 66, 0.55);
+  border: 1px solid rgba(32, 58, 95, 0.78);
+  border-radius: var(--radius);
+}
+
+.mission-chip-grid span.available {
+  color: var(--text);
+}
+
+.mission-chip-grid span.active {
+  color: var(--accent);
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.46);
+}
+
+.security-lab-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 22px;
+  align-items: start;
+}
+
+.mission-column,
+.security-lab-aside {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.security-lab-aside {
+  position: sticky;
+  top: 24px;
+}
+
+.security-lab-page .incident-list {
+  gap: 16px;
+}
+
+.security-lab-page .incident-card {
+  gap: 16px;
+  padding: 18px;
+  background:
+    linear-gradient(180deg, rgba(0, 212, 255, 0.035), transparent 42%),
+    rgba(13, 27, 47, 0.92);
+}
+
+.incident-head {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  gap: 10px;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.incident-head strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--accent);
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.security-lab-page .incident-card h2 {
+  color: var(--text);
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+.security-lab-page .option-grid button {
+  min-height: 48px;
+  padding: 11px 12px;
+  background: rgba(18, 38, 66, 0.62);
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.security-lab-page .option-grid button:hover {
+  background: rgba(18, 38, 66, 0.86);
+  border-color: rgba(0, 212, 255, 0.36);
+  transform: translateY(-1px);
+}
+
+.security-lab-page .option-grid button.selected {
+  color: var(--text);
+  background: rgba(0, 212, 255, 0.12);
+  border-color: rgba(0, 212, 255, 0.68);
+}
+
+.challenge-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.challenge-actions .result-band {
+  flex: 1;
+  min-height: 48px;
+  padding: 10px 14px;
+}
+
+.score-panel,
+.security-lab-page .lab-leaderboard {
+  padding: 16px;
+}
+
+.score-panel h2,
+.security-lab-page .lab-leaderboard h2 {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 1rem;
+}
+
+.score-panel h2::before,
+.security-lab-page .lab-leaderboard h2::before {
+  content: ">_ ";
+}
+
+.score-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.score-grid div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) max-content;
+  gap: 12px;
+  align-items: baseline;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(32, 58, 95, 0.64);
+}
+
+.score-grid div:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.score-grid strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.92rem;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lab-leaderboard-table {
+  display: grid;
+  gap: 8px;
+}
+
+.lab-leaderboard-head,
+.lab-leaderboard-row {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 52px 68px 50px;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.lab-leaderboard-head {
+  color: var(--accent);
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(32, 58, 95, 0.7);
+}
+
+.lab-leaderboard-row {
+  color: var(--text-muted);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.lab-leaderboard-row strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lab-leaderboard-head span:nth-child(n + 3),
+.lab-leaderboard-row span:nth-child(n + 3) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.security-lab-page .empty-board {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1209,6 +1539,8 @@ a.leaderboard-row:hover {
   }
 
   .main-home-grid,
+  .security-lab-hero,
+  .security-lab-layout,
   .post-card,
   .post-grid,
   .info-grid,
@@ -1236,5 +1568,43 @@ a.leaderboard-row:hover {
     padding-left: 0;
     border-top: 1px solid rgba(32, 58, 95, 0.75);
     border-left: 0;
+  }
+
+  .security-lab-aside {
+    position: static;
+  }
+
+  .security-lab-copy h1 {
+    white-space: normal;
+  }
+
+  .current-mission,
+  .incident-head,
+  .challenge-actions {
+    align-items: flex-start;
+  }
+
+  .current-mission,
+  .incident-head {
+    grid-template-columns: 1fr;
+  }
+
+  .challenge-actions {
+    flex-direction: column;
+  }
+
+  .challenge-actions .primary-button,
+  .challenge-actions .result-band {
+    width: 100%;
+  }
+
+  .lab-leaderboard-head,
+  .lab-leaderboard-row {
+    grid-template-columns: 34px minmax(0, 1fr) 46px 58px;
+  }
+
+  .lab-leaderboard-head span:last-child,
+  .lab-leaderboard-row span:last-child {
+    display: none;
   }
 }
