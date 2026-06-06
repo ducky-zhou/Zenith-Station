@@ -128,6 +128,7 @@ export function Home() {
             <h2>Quick Links</h2>
             <Link to="/posts">/articles <ArrowRight aria-hidden="true" /></Link>
             <Link to="/security-game">/security-lab <ArrowRight aria-hidden="true" /></Link>
+            <Link to="/minesweeper">/minesweeper <ArrowRight aria-hidden="true" /></Link>
             <Link to="/about">/about <ArrowRight aria-hidden="true" /></Link>
             <a href="/rss.xml">/rss.xml <ArrowRight aria-hidden="true" /></a>
           </section>

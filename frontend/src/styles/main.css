@@ -1632,6 +1632,202 @@ a.leaderboard-row:hover {
   gap: 16px;
 }
 
+.minesweeper-page {
+  max-width: 980px;
+}
+
+.minesweeper-intro {
+  display: grid;
+  gap: 8px;
+}
+
+.minesweeper-intro h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.minesweeper-intro p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.winmine-shell {
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  color: #111827;
+  background: #c0c0c0;
+  border: 2px solid #f8f8f8;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+  font-family: Tahoma, "MS Sans Serif", system-ui, sans-serif;
+}
+
+.winmine-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 5px 7px;
+  color: #fff;
+  background: linear-gradient(90deg, #1d4ed8, #60a5fa);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.winmine-titlebar span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.winmine-titlebar svg {
+  width: 15px;
+  height: 15px;
+}
+
+.winmine-controls {
+  display: flex;
+  gap: 3px;
+}
+
+.winmine-controls i {
+  width: 15px;
+  height: 15px;
+  background: #d9d9d9;
+  border: 1px solid #fff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+}
+
+.winmine-menu {
+  display: flex;
+  gap: 4px;
+  padding: 5px 7px;
+  background: #d0d0d0;
+  border-bottom: 1px solid #808080;
+}
+
+.winmine-menu button {
+  color: #111827;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 2px 8px;
+}
+
+.winmine-menu button.active,
+.winmine-menu button:hover {
+  background: #e8e8e8;
+  border-color: #808080;
+}
+
+.winmine-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px;
+  padding: 8px;
+  border: 2px solid #808080;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+
+.seven-seg {
+  min-width: 60px;
+  color: #ff2b2b;
+  text-align: center;
+  background: #050505;
+  border: 1px inset #808080;
+  padding: 3px 7px;
+  font-family: "Courier New", monospace;
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 2px;
+}
+
+.smiley-button {
+  display: inline-grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  gap: 5px;
+  min-width: 48px;
+  min-height: 36px;
+  color: #111827;
+  background: #d0d0d0;
+  border: 2px solid #fff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  font-size: 1.25rem;
+}
+
+.smiley-button:active {
+  border: 2px solid #404040;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+
+.smiley-button svg {
+  width: 13px;
+  height: 13px;
+}
+
+.minefield-wrap {
+  max-width: 100%;
+  margin: 10px;
+  overflow: auto;
+  border: 3px solid #808080;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+
+.minefield {
+  display: grid;
+  width: max-content;
+  background: #808080;
+  gap: 1px;
+}
+
+.mine-cell {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: #111827;
+  background: #c0c0c0;
+  border: 2px solid #fff;
+  border-right-color: #404040;
+  border-bottom-color: #404040;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.mine-cell.revealed {
+  background: #bdbdbd;
+  border: 1px solid #8a8a8a;
+}
+
+.mine-cell.flagged {
+  color: #dc2626;
+}
+
+.mine-cell.exploded {
+  background: #ef4444;
+}
+
+.winmine-status {
+  margin: 0 10px 10px;
+  padding: 6px 8px;
+  color: #111827;
+  background: #d0d0d0;
+  border: 1px inset #808080;
+  font-size: 0.86rem;
+}
+
 @media (max-width: 1160px) {
   .main-home-grid {
     grid-template-columns: minmax(0, 1fr) 288px;

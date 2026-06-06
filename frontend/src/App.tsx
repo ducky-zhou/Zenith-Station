@@ -9,6 +9,7 @@ import { AdminStats } from "./pages/AdminStats";
 import { Login, Register } from "./pages/AuthPages";
 import { Favorites } from "./pages/Favorites";
 import { Home } from "./pages/Home";
+import { Minesweeper } from "./pages/Minesweeper";
 import { OAuthCallback } from "./pages/OAuthCallback";
 import { PostDetail } from "./pages/PostDetail";
 import { PostEditor } from "./pages/PostEditor";
@@ -27,6 +28,7 @@ export function App() {
         <Route path="register" element={<Register />} />
         <Route path="oauth/callback" element={<OAuthCallback />} />
         <Route path="security-game" element={<SecurityGame />} />
+        <Route path="minesweeper" element={<Minesweeper />} />
         <Route element={<ProtectedRoute />}>
           <Route path="favorites" element={<Favorites />} />
         </Route>

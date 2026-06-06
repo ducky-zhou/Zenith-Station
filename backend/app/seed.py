@@ -148,6 +148,122 @@ SECURITY_QUESTIONS = [
 ]
 
 
+LLM_SECURITY_TITLE = "LLM Security 入门学习路线"
+LLM_SECURITY_CONTENT = """# LLM Security
+
+https://mundi-xu.github.io/2025/09/11/getting-started-with-llm-security/
+
+## 理解LLM是如何“思考”的
+
+Transformer 架构
+
+- LLM 如何通过 Token 预测下一个词？
+- 为什么 Prompt 会被“注入”并改变模型行为？
+- 为什么模型会“幻觉”或输出有害内容？
+
+神经网络可视化教程：[3Blue1Brown 的神经网络系列](https://www.3blue1brown.com/?topic=neural-networks)
+
+> 建议先看前 4 集（神经网络基础），再配合《The Illustrated Transformer》快速建立 Transformer 心智模型。
+
+
+## 熟悉主流LLM平台与API
+
+交互方式
+1. **界面交互** ：初步体验 与 Prompt Engineering
+2. **API 调用**：构建可复现、可自动化的安全测试环境
+
+两个平台
+
+- [Hugging Face](https://huggingface.co/)
+> 相当于 AI 领域的 GitHub，有开源模型库（Llama、Mistral、Qwen、DeepSeek 等）、数据集与评估脚本（用于安全 benchmark），Spaces 平台还可以快速部署 Demo 进行漏洞复现。
+
+
+- [OpenRouter](https://openrouter.ai/)
+> 聚合了 GPT-5、Claude 4、Gemini、DeepSeek 等数百种模型，提供免费模型和统一 API 接口，降低多模型测试成本。国内访问友好，支持支付宝/微信支付，适合预算有限的学习者。
+> > 注册后，可以先用免费模型测试不同厂商对”越狱 Prompt”的安全水位，记录各家的脆弱性表现。
+
+
+## 系统化认知LLM风险
+> 理解哪些是高频高危漏洞，攻击者在使用什么战术
+
+
+### OWASP Top 10 for LLM Applications
+
+[OWASP官网](https://owasp.org/)
+
+
+[OWASP官方发布](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+ LLM 安全风险分类框架
+
+| 编号 | 风险名称 | 关键示例 |
+|---|---|---|
+| LLM01 | 提示注入（Prompt Injection） | 恶意指令覆盖系统提示，诱导模型执行非预期操作 |
+| LLM02 | 敏感信息泄露（Sensitive Information Disclosure） | 模型输出用户隐私、密钥、内部配置或训练数据中的敏感内容 |
+| LLM03 | 供应链风险（Supply Chain） | 第三方模型、插件、数据集或依赖包被污染或存在漏洞 |
+| LLM04 | 数据与模型投毒（Data and Model Poisoning） | 在预训练、微调或嵌入数据中注入恶意样本影响模型行为 |
+| LLM05 | 不安全输出处理（Improper Output Handling） | LLM 输出未经校验就执行代码、SQL、HTML 或跳转链接 |
+| LLM06 | 过度代理能力（Excessive Agency） | 赋予模型过高权限，使其能越权调用工具、API 或修改数据 |
+| LLM07 | 系统提示泄露（System Prompt Leakage） | 用户诱导模型泄露系统提示、隐藏规则或内部策略 |
+| LLM08 | 向量与嵌入弱点（Vector and Embedding Weaknesses） | 通过相似度检索、RAG 或向量库注入恶意内容并影响回答 |
+| LLM09 | 错误信息（Misinformation） | 模型生成幻觉内容，导致用户基于错误信息做出决策 |
+| LLM10 | 无界消耗（Unbounded Consumption） | 攻击者诱导模型大量消耗 token、算力、API 调用或费用 |
+
+> 了解每个的攻击路径、影响范围和解决方案，构建LLM安全防御体系的基础
+
+
+### MITRE ATLAS
+
+[MITRE ATLAS](https://atlas.mitre.org/)
+AI系统攻击类别库
+
+> 真实世界中针对 AI 系统的攻击形态 → 格式、技术与过程（TTPs）
+>
+> 例如：
+> TA0001 – 利用模型接口 → T0003 – 提示注入 → T0008 – 感应数据泄漏
+
+结合复现的攻击案例，对照ATLAS编号，构建完整的攻击树
+
+框架适用于在红队演练、威胁建模和防御策略推演
+
+
+
+## 用工具进行红队演练
+安全的本质是对抗
+
+### NVIDIA Garak
+
+[Garak](https://github.com/NVIDIA/garak)（Garak, Eliminator of Models）
+
+- 自动化探测提示注入、越狱、隐私泄露、拒绝服务等攻击
+- 支持多模型模型并行测试（本地+API）
+- 生成攻击报告与风险评分。
+
+用法示例：
+```zsh
+garak --model openai/gpt-4 --probe jailbreak
+```
+系统会自动运行数十种越狱 Prompt，并汇总成功率。
+
+> 建议用 Garak 复现 OWASP LLM01~LLM05，记录不同模型的防御强度，思考绕过方式。
+
+
+## 融入社区，持续学习
+
+- **智能体(Agent)安全**：自主调用工具、写代码、自我迭代
+- **模型上下文协议(MCP)滥用**：通过上下文窗口注入指令，绕过系统提示
+- **间接提示注入（Indirect Prompt Injection）**：通过 RAG、插件、文件上传等侧信道注入恶意指令
+- **多模态安全**：从图像到文本的提示污染、语音指令劫持等
+
+GitHub 上搜索 [Awesome LLM Security](https://github.com/search?q=Awesome+LLM+Security&type=repositories) 可以找到不少整理好的资源列表，比如 Trail of Bits 的 awesome-llm-security、Stanford 的 llm-security-papers，以及 PromptInject、LLM-Guard 等项目。
+
+
+> 建议每周花 1 小时浏览 GitHub Trending 和 arXiv 最新论文（关键词 “LLM Security 2025”）
+
+
+## 安全 ≠ 越狱
+"""
+
+
 def ensure_seed_data() -> None:
     init_db()
     settings = get_settings()
@@ -188,6 +304,18 @@ def ensure_seed_data() -> None:
                         "这个博客使用 React、FastAPI 和数据库实现，包含文章、评论、点赞、收藏和安全主题小游戏。\n\n"
                         "安全设计重点包括密码哈希、JWT 鉴权、管理员权限控制和题库答案保护。"
                     ),
+                    cover_url=None,
+                    status="published",
+                    author_id=admin.id,
+                )
+            )
+
+        if db.scalar(select(Post.id).where(Post.title == LLM_SECURITY_TITLE)) is None:
+            db.add(
+                Post(
+                    title=LLM_SECURITY_TITLE,
+                    summary="整理 LLM Security 的学习入口：Transformer 心智模型、OWASP LLM Top 10、MITRE ATLAS、Garak 红队工具与持续学习资源。",
+                    content=LLM_SECURITY_CONTENT,
                     cover_url=None,
                     status="published",
                     author_id=admin.id,
