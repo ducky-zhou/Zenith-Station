@@ -288,7 +288,7 @@ button:disabled {
 
 .home-main-column {
   display: grid;
-  gap: 24px;
+  gap: 32px;
 }
 
 .terminal-window,
@@ -390,7 +390,7 @@ button:disabled {
 .page-stack > h1 {
   margin: 0;
   color: var(--text);
-  font-size: clamp(2rem, 4vw, 3.9rem);
+  font-size: clamp(2.25rem, 3.5vw, 3rem);
   line-height: 1.05;
 }
 
@@ -575,6 +575,10 @@ button:disabled {
 .compact-list {
   display: grid;
   gap: 10px;
+}
+
+.home-aside-column.side-stack {
+  gap: 16px;
 }
 
 .section-heading {
@@ -772,6 +776,11 @@ button:disabled {
   display: block;
 }
 
+.lab-entrance-card > div:last-child {
+  display: grid;
+  justify-items: start;
+}
+
 .lab-entrance-card strong {
   font-size: 1.04rem;
 }
@@ -786,6 +795,7 @@ button:disabled {
 }
 
 .lab-entrance-card .primary-button {
+  justify-self: end;
   min-height: 34px;
   padding: 6px 12px;
 }
@@ -813,6 +823,18 @@ button:disabled {
 
 .leaderboard-item {
   color: var(--text-muted);
+}
+
+.leaderboard-head span:nth-child(3),
+.leaderboard-head span:nth-child(4),
+.leaderboard-item span:nth-child(3),
+.leaderboard-item span:nth-child(4) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.leaderboard-item span:first-child {
+  font-variant-numeric: tabular-nums;
 }
 
 .leaderboard-item strong {

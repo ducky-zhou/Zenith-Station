@@ -52,8 +52,8 @@ export function Home() {
                       <ShieldCheck aria-hidden="true" />
                       Web & Security Lab
                     </div>
-                    <h1>Security Notes & Builds</h1>
-                    <p>Notes on web development, security practice, AI tooling, and side projects.</p>
+                    <h1>Security Lab Notes</h1>
+                    <p>Web, Security, AI & Project Experiments</p>
                   </div>
                 </div>
                 <div className="terminal-line muted">$ cat interests.txt</div>
@@ -138,11 +138,11 @@ export function Home() {
                 <Bot aria-hidden="true" />
               </div>
               <div>
-                <strong>Security Lab</strong>
-                <span>安全闯关小游戏</span>
-                <p>挑战你的安全技能，冲击排行榜。</p>
+                <strong>Security Lab Challenge</strong>
+                <span>Phishing · SQLi · leaderboard</span>
+                <p>Practice security instincts in short missions.</p>
                 <Link to="/security-game" className="primary-button compact">
-                  进入实验室 <ArrowRight aria-hidden="true" />
+                  <ArrowRight aria-hidden="true" /> Enter Lab
                 </Link>
               </div>
             </div>
