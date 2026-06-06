@@ -7,11 +7,11 @@ import { StatusMessage } from "../components/StatusMessage";
 import type { ScoreRow, SecurityGameResult, SecurityQuestion } from "../types";
 
 const missionCatalog = [
-  { id: "phishing-detective", title: "Phishing Detective", description: "识别钓鱼邮件" },
-  { id: "url-inspector", title: "URL Inspector", description: "判断可疑链接" },
-  { id: "password-audit", title: "Password Audit", description: "判断密码强度" },
-  { id: "xss-hunter", title: "XSS Hunter", description: "识别危险输入" },
-  { id: "sql-injection-gate", title: "SQL Injection Gate", description: "识别 SQL 注入风险" },
+  { id: "phishing-detective", title: "Phishing Detective", description: "识别钓鱼邮件与伪装链接", difficulty: "easy" },
+  { id: "url-inspector", title: "URL Inspector", description: "判断可疑链接和跳转风险", difficulty: "easy" },
+  { id: "password-audit", title: "Password Audit", description: "判断密码强度与泄露风险", difficulty: "medium" },
+  { id: "xss-hunter", title: "XSS Hunter", description: "识别危险输入与脚本注入", difficulty: "medium" },
+  { id: "sql-injection-guard", title: "SQL Injection Guard", description: "判断 SQL 注入风险", difficulty: "medium" },
 ];
 
 function titleizeGameName(name: string) {
@@ -42,7 +42,7 @@ export function SecurityGame() {
 
   const gameLabel = useMemo(() => titleizeGameName(gameName), [gameName]);
   const mission = useMemo(
-    () => missionCatalog.find((item) => item.id === gameName) ?? { id: gameName, title: gameLabel, description: "安全判断任务" },
+    () => missionCatalog.find((item) => item.id === gameName) ?? { id: gameName, title: gameLabel, description: "安全判断任务", difficulty: "normal" },
     [gameLabel, gameName],
   );
   const availableMissionNames = useMemo(() => new Set(games), [games]);
@@ -122,22 +122,11 @@ export function SecurityGame() {
             <span className="quiz-kicker">Mission Select</span>
             <p>选择一个安全任务开始挑战</p>
           </div>
-          <select
-            value={gameName}
-            onChange={(event) => {
-              selectGame(event.target.value);
-            }}
-          >
-            {games.map((game) => (
-              <option key={game} value={game}>
-                {titleizeGameName(game)}
-              </option>
-            ))}
-          </select>
           <div className="mission-chip-grid" aria-label="planned security missions">
             {missionCatalog.map((item) => {
               const isActive = item.id === gameName;
               const isAvailable = availableMissionNames.has(item.id);
+              const missionMeta = isActive ? `${item.difficulty} · ${questions.length} questions` : isAvailable ? `${item.difficulty} · ready` : `${item.difficulty} · coming soon`;
               return (
                 <button
                   key={item.id}
@@ -148,7 +137,9 @@ export function SecurityGame() {
                   title={isAvailable ? item.description : `${item.description} · coming soon`}
                   onClick={() => selectGame(item.id)}
                 >
-                  {item.title}
+                  <strong>{item.title}</strong>
+                  <span>{item.description}</span>
+                  <small>{missionMeta}</small>
                 </button>
               );
             })}

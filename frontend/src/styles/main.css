@@ -1247,30 +1247,17 @@ a.leaderboard-row:hover {
   background: rgba(8, 20, 36, 0.72);
 }
 
-.mission-select-card select {
-  width: min(100%, 260px);
-  min-height: 40px;
-  color: var(--text);
-  background: rgba(18, 38, 66, 0.78);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0 10px;
-}
-
-.mission-select-card select:focus {
-  outline: 2px solid rgba(0, 212, 255, 0.2);
-  border-color: rgba(0, 212, 255, 0.55);
-}
-
 .mission-chip-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .mission-chip-grid button {
-  min-height: 34px;
-  padding: 6px 10px;
+  display: grid;
+  gap: 6px;
+  min-height: 104px;
+  padding: 12px;
   color: var(--text-muted);
   font-size: 0.78rem;
   text-align: left;
@@ -1282,6 +1269,31 @@ a.leaderboard-row:hover {
     border-color 160ms ease,
     background 160ms ease,
     transform 160ms ease;
+}
+
+.mission-chip-grid button strong,
+.mission-chip-grid button span,
+.mission-chip-grid button small {
+  min-width: 0;
+}
+
+.mission-chip-grid button strong {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.mission-chip-grid button span {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.mission-chip-grid button small {
+  align-self: end;
+  color: rgba(159, 180, 208, 0.78);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.72rem;
 }
 
 .mission-chip-grid button.available {
@@ -1299,7 +1311,13 @@ a.leaderboard-row:hover {
 .mission-chip-grid button.active {
   color: var(--accent);
   background: rgba(0, 212, 255, 0.1);
-  border-color: rgba(0, 212, 255, 0.46);
+  border-color: rgba(0, 212, 255, 0.62);
+  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.1);
+}
+
+.mission-chip-grid button.active strong,
+.mission-chip-grid button.active small {
+  color: var(--accent);
 }
 
 .mission-chip-grid button.active:focus-visible {
@@ -1310,9 +1328,18 @@ a.leaderboard-row:hover {
 .mission-chip-grid button.coming-soon {
   color: rgba(159, 180, 208, 0.72);
   background:
-    linear-gradient(135deg, rgba(18, 38, 66, 0.52), rgba(13, 27, 47, 0.52)),
+    linear-gradient(180deg, rgba(18, 38, 66, 0.64), rgba(13, 27, 47, 0.72)),
     rgba(18, 38, 66, 0.42);
-  border-style: dashed;
+  border-color: rgba(32, 58, 95, 0.7);
+}
+
+.mission-chip-grid button.coming-soon strong {
+  color: rgba(238, 245, 255, 0.7);
+}
+
+.mission-chip-grid button.coming-soon span,
+.mission-chip-grid button.coming-soon small {
+  color: rgba(159, 180, 208, 0.62);
 }
 
 .mission-chip-grid button:disabled {
@@ -1579,6 +1606,7 @@ a.leaderboard-row:hover {
   .info-grid,
   .stats-grid,
   .stats-panels,
+  .mission-chip-grid,
   .option-grid {
     grid-template-columns: 1fr;
   }
