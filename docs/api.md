@@ -20,7 +20,12 @@ Authorization: Bearer <token>
 POST /auth/register
 POST /auth/login
 GET  /auth/me
+GET  /auth/github/enabled
+GET  /auth/github/start
+GET  /auth/github/callback
 ```
+
+GitHub 登录启用条件：后端环境变量中配置 `GITHUB_CLIENT_ID` 和 `GITHUB_CLIENT_SECRET`，并将 GitHub OAuth App 的 callback URL 指向 `/api/auth/github/callback`。
 
 ## 文章
 
@@ -90,5 +95,55 @@ POST /track
   "event": "page_view",
   "path": "/posts/1",
   "extra": {}
+}
+```
+
+## MCP Server
+
+```text
+GET  /mcp
+POST /mcp
+```
+
+`POST /mcp` 使用 HTTP JSON-RPC，并要求登录态：
+
+```text
+Authorization: Bearer <token>
+```
+
+支持基础 MCP 方法：
+
+```text
+initialize
+tools/list
+tools/call
+notifications/initialized
+```
+
+当前工具：
+
+```text
+blog.profile.get
+blog.posts.list
+blog.posts.get
+blog.posts.create    # admin
+blog.posts.update    # admin
+blog.posts.delete    # admin
+blog.stats.get       # admin
+```
+
+示例：
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "blog.posts.list",
+    "arguments": {
+      "limit": 5
+    }
+  }
 }
 ```

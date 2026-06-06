@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.api import auth, comments, events, interactions, posts, profile, security_games, stats
+from app.api import auth, comments, events, interactions, mcp, posts, profile, security_games, stats
 from app.core.config import get_settings
 from app.seed import ensure_seed_data
 
@@ -49,6 +49,7 @@ def api_index():
         "posts": "/api/posts",
         "profile": "/api/profile",
         "security_games": "/api/security-games",
+        "mcp": "/api/mcp",
     }
 
 
@@ -60,3 +61,4 @@ app.include_router(profile.router, prefix="/api")
 app.include_router(events.router, prefix="/api")
 app.include_router(security_games.router, prefix="/api")
 app.include_router(stats.router, prefix="/api")
+app.include_router(mcp.router, prefix="/api")

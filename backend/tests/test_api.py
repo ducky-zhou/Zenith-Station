@@ -53,6 +53,51 @@ def test_github_login_is_disabled_without_config():
     assert response.json() == {"enabled": False}
 
 
+def test_github_login_start_requires_config():
+    with TestClient(app) as client:
+        response = client.get("/api/auth/github/start", follow_redirects=False)
+    assert response.status_code == 503
+
+
+def test_mcp_requires_authentication():
+    with TestClient(app) as client:
+        response = client.post("/api/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"})
+    assert response.status_code == 401
+
+
+def test_mcp_lists_and_calls_tools():
+    with TestClient(app) as client:
+        login = client.post(
+            "/api/auth/login",
+            json={"email": "admin@example.com", "password": "ChangeMe123!"},
+        )
+        token = login.json()["access_token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        initialized = client.post("/api/mcp", headers=headers, json={"jsonrpc": "2.0", "id": 1, "method": "initialize"})
+        assert initialized.status_code == 200
+        assert initialized.json()["result"]["serverInfo"]["name"] == "SecBlog MCP Server"
+
+        tools = client.post("/api/mcp", headers=headers, json={"jsonrpc": "2.0", "id": 2, "method": "tools/list"})
+        assert tools.status_code == 200
+        tool_names = [tool["name"] for tool in tools.json()["result"]["tools"]]
+        assert "blog.posts.list" in tool_names
+        assert "blog.posts.create" in tool_names
+
+        posts = client.post(
+            "/api/mcp",
+            headers=headers,
+            json={
+                "jsonrpc": "2.0",
+                "id": 3,
+                "method": "tools/call",
+                "params": {"name": "blog.posts.list", "arguments": {"limit": 2}},
+            },
+        )
+        assert posts.status_code == 200
+        assert posts.json()["result"]["content"][0]["type"] == "text"
+
+
 def test_admin_stats_are_available():
     with TestClient(app) as client:
         login = client.post(

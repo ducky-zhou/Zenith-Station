@@ -35,6 +35,12 @@ npm run dev
 http://服务器公网IP/api/auth/github/callback
 ```
 
+如果已经绑定域名并开启 HTTPS，建议使用正式域名：
+
+```text
+https://你的域名/api/auth/github/callback
+```
+
 并在 `.env` 中配置：
 
 ```text
@@ -42,6 +48,40 @@ FRONTEND_BASE_URL=http://服务器公网IP
 GITHUB_CLIENT_ID=你的 GitHub OAuth Client ID
 GITHUB_CLIENT_SECRET=你的 GitHub OAuth Client Secret
 GITHUB_REDIRECT_URI=http://服务器公网IP/api/auth/github/callback
+```
+
+配置完成后，登录页会自动显示“使用 GitHub 登录”。可以先访问：
+
+```text
+http://服务器公网IP/api/auth/github/enabled
+```
+
+返回 `{"enabled":true}` 即说明后端已读取到配置。
+
+## MCP Server
+
+后端提供 HTTP JSON-RPC MCP 入口：
+
+```text
+http://服务器公网IP/api/mcp
+```
+
+MCP 请求必须携带登录后的 JWT：
+
+```text
+Authorization: Bearer <token>
+```
+
+读工具可由普通登录用户使用，创建/更新/删除文章和读取统计需要管理员账号。当前工具包括：
+
+```text
+blog.profile.get
+blog.posts.list
+blog.posts.get
+blog.posts.create
+blog.posts.update
+blog.posts.delete
+blog.stats.get
 ```
 
 启动：
