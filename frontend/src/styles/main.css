@@ -983,6 +983,60 @@ select:focus {
   border: 1px solid var(--border);
 }
 
+.ai-summary-panel,
+.ai-question-panel {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  color: var(--text);
+  background:
+    linear-gradient(90deg, rgba(0, 212, 255, 0.055), transparent 44%),
+    rgba(13, 27, 47, 0.9);
+  border: 1px solid rgba(0, 212, 255, 0.22);
+  border-radius: var(--radius);
+}
+
+.ai-summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(32, 58, 95, 0.72);
+}
+
+.ai-summary-head span,
+.ai-question-panel .quiz-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-weight: 800;
+}
+
+.ai-summary-head svg,
+.ai-question-panel svg {
+  width: 17px;
+  height: 17px;
+}
+
+.ai-summary-head small,
+.ai-summary-panel p,
+.ai-question-panel p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.ai-summary-panel :is(ul, ol) {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.ai-summary-panel :is(p, li) {
+  line-height: 1.7;
+}
+
 .interaction-bar button.active {
   color: var(--accent);
   background: rgba(0, 212, 255, 0.1);
@@ -1530,6 +1584,24 @@ a.leaderboard-row:hover {
   line-height: 1.6;
 }
 
+.ai-question-panel {
+  grid-template-columns: minmax(0, 1fr) max-content;
+  align-items: start;
+}
+
+.ai-question-panel pre {
+  grid-column: 1 / -1;
+  max-height: 280px;
+  margin: 0;
+  overflow: auto;
+  padding: 14px;
+  color: var(--text);
+  white-space: pre-wrap;
+  background: rgba(7, 17, 31, 0.84);
+  border: 1px solid rgba(32, 58, 95, 0.8);
+  border-radius: var(--radius);
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1607,6 +1679,7 @@ a.leaderboard-row:hover {
   .stats-grid,
   .stats-panels,
   .mission-chip-grid,
+  .ai-question-panel,
   .option-grid {
     grid-template-columns: 1fr;
   }

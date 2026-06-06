@@ -1,4 +1,4 @@
-import { Bookmark, MessageCircle, ThumbsUp } from "lucide-react";
+import { Bookmark, Bot, MessageCircle, ThumbsUp } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
@@ -16,6 +16,10 @@ export function PostDetail() {
   const [commentText, setCommentText] = useState("");
   const [liked, setLiked] = useState(false);
   const [favorited, setFavorited] = useState(false);
+  const [aiSummary, setAiSummary] = useState("");
+  const [aiSummaryMeta, setAiSummaryMeta] = useState("");
+  const [aiSummaryLoading, setAiSummaryLoading] = useState(false);
+  const [aiSummaryError, setAiSummaryError] = useState("");
   const [error, setError] = useState("");
 
   const load = () => {
@@ -40,6 +44,21 @@ export function PostDetail() {
     api.track("page_view", `/posts/${id}`);
     load();
   }, [id, user?.id]);
+
+  useEffect(() => {
+    if (!post) return;
+    setAiSummary("");
+    setAiSummaryError("");
+    setAiSummaryMeta("");
+    setAiSummaryLoading(true);
+    api.postAiSummary(post.id)
+      .then((data) => {
+        setAiSummary(data.text);
+        setAiSummaryMeta(`${data.provider} · ${data.model}`);
+      })
+      .catch((err: Error) => setAiSummaryError(err.message))
+      .finally(() => setAiSummaryLoading(false));
+  }, [post?.id, post?.updated_at]);
 
   const toggleLike = async () => {
     if (!id || !user) return;
@@ -86,6 +105,21 @@ export function PostDetail() {
       <div className="article-content">
         <ReactMarkdown>{post.content}</ReactMarkdown>
       </div>
+      <section className="ai-summary-panel">
+        <div className="ai-summary-head">
+          <span>
+            <Bot aria-hidden="true" /> AI 摘要
+          </span>
+          {aiSummaryMeta && <small>{aiSummaryMeta}</small>}
+        </div>
+        {aiSummaryLoading ? (
+          <p>DeepSeek 正在整理这篇文章...</p>
+        ) : aiSummary ? (
+          <ReactMarkdown>{aiSummary}</ReactMarkdown>
+        ) : (
+          <p>{aiSummaryError ? `暂时无法生成摘要：${aiSummaryError}` : "暂无 AI 摘要。"}</p>
+        )}
+      </section>
       <div className="interaction-bar">
         <button onClick={toggleLike} disabled={!user} className={liked ? "active" : ""} type="button">
           <ThumbsUp aria-hidden="true" /> {liked ? "已赞" : "点赞"}

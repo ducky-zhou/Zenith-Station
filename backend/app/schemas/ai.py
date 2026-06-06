@@ -28,6 +28,11 @@ class AiSecurityQuestionRequest(BaseModel):
     difficulty: str = Field(default="easy", pattern="^(easy|medium|hard)$")
 
 
+class AiDigestRequest(BaseModel):
+    source_text: str = Field(default="", max_length=20000)
+    focus: str = Field(default="Web security and AI engineering", max_length=120)
+
+
 class AiTextRead(BaseModel):
     provider: str = "deepseek"
     model: str

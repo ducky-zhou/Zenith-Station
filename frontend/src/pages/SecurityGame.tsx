@@ -1,4 +1,4 @@
-import { Trophy } from "lucide-react";
+import { Bot, Trophy } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { api } from "../api/client";
@@ -12,6 +12,8 @@ const missionCatalog = [
   { id: "password-audit", title: "Password Audit", description: "判断密码强度与泄露风险", difficulty: "medium" },
   { id: "xss-hunter", title: "XSS Hunter", description: "识别危险输入与脚本注入", difficulty: "medium" },
   { id: "sql-injection-guard", title: "SQL Injection Guard", description: "判断 SQL 注入风险", difficulty: "medium" },
+  { id: "vulnerability-scan", title: "Vulnerability Scan", description: "审计代码片段与日志泄露", difficulty: "medium" },
+  { id: "packet-detective", title: "Packet Detective", description: "分析模拟抓包与异常请求", difficulty: "medium" },
 ];
 
 function titleizeGameName(name: string) {
@@ -38,6 +40,8 @@ export function SecurityGame() {
   const [leaderboard, setLeaderboard] = useState<ScoreRow[]>([]);
   const [startedAt, setStartedAt] = useState(Date.now());
   const [error, setError] = useState("");
+  const [aiDraft, setAiDraft] = useState("");
+  const [aiDraftLoading, setAiDraftLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const gameLabel = useMemo(() => titleizeGameName(gameName), [gameName]);
@@ -104,6 +108,24 @@ export function SecurityGame() {
     }
   };
 
+  const generateQuestionDraft = async () => {
+    if (user?.role !== "admin") {
+      setError("管理员登录后可以生成 AI 题目草稿。");
+      return;
+    }
+    setError("");
+    setAiDraft("");
+    setAiDraftLoading(true);
+    try {
+      const data = await api.generateSecurityQuestion(mission.title, mission.difficulty === "easy" ? "easy" : "medium");
+      setAiDraft(data.text);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "AI 题目生成失败");
+    } finally {
+      setAiDraftLoading(false);
+    }
+  };
+
   return (
     <section className="page-stack security-lab-page">
       <header className="security-lab-hero">
@@ -146,6 +168,20 @@ export function SecurityGame() {
           </div>
         </div>
       </header>
+      {user?.role === "admin" && (
+        <section className="ai-question-panel">
+          <div>
+            <span className="quiz-kicker">
+              <Bot aria-hidden="true" /> AI Mission Draft
+            </span>
+            <p>使用 DeepSeek 根据当前任务生成安全题目草稿，人工审核后再加入正式题库。</p>
+          </div>
+          <button className="secondary-button" type="button" onClick={generateQuestionDraft} disabled={aiDraftLoading}>
+            {aiDraftLoading ? "Generating..." : "Generate Draft"}
+          </button>
+          {aiDraft && <pre>{aiDraft}</pre>}
+        </section>
+      )}
       {error && <StatusMessage tone="error" message={error} />}
       <div className="security-lab-layout">
         <div className="mission-column">

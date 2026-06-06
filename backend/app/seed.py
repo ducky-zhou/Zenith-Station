@@ -50,6 +50,101 @@ SECURITY_QUESTIONS = [
         "difficulty": "easy",
         "category": "web-security",
     },
+    {
+        "game_name": "url-inspector",
+        "question": "下面哪个 URL 最可疑？",
+        "options": [
+            "https://github.com/login",
+            "https://docs.python.org/3/",
+            "http://paypa1-security.example.net/verify",
+            "https://zju.edu.cn/",
+        ],
+        "answer": "2",
+        "explanation": "paypa1 使用数字 1 模仿 paypal，并且通过非官方 example.net 域名诱导验证，风险最高。",
+        "difficulty": "easy",
+        "category": "url-analysis",
+    },
+    {
+        "game_name": "url-inspector",
+        "question": "短链接跳转到陌生登录页时，最合理的操作是？",
+        "options": ["直接输入账号", "关闭页面并从官网入口访问", "把链接发给别人测试", "关闭浏览器安全提示"],
+        "answer": "1",
+        "explanation": "陌生跳转登录页可能是凭证钓鱼，应从官方入口重新访问。",
+        "difficulty": "easy",
+        "category": "url-analysis",
+    },
+    {
+        "game_name": "password-audit",
+        "question": "以下哪个密码策略更合理？",
+        "options": ["所有网站使用同一个复杂密码", "短密码但经常换", "使用密码管理器生成唯一强密码", "生日加姓名方便记忆"],
+        "answer": "2",
+        "explanation": "每个网站使用唯一强密码可以降低撞库和单点泄露影响。",
+        "difficulty": "medium",
+        "category": "account-security",
+    },
+    {
+        "game_name": "password-audit",
+        "question": "发现某服务密码可能泄露后，第一优先级操作是？",
+        "options": ["只删除浏览器缓存", "立即修改该服务密码并检查复用账号", "等待平台通知", "继续使用直到被强制下线"],
+        "answer": "1",
+        "explanation": "应立即修改泄露服务密码，并检查其他复用同密码的账号。",
+        "difficulty": "medium",
+        "category": "account-security",
+    },
+    {
+        "game_name": "xss-hunter",
+        "question": "评论区直接把用户输入拼进 innerHTML，最主要的风险是什么？",
+        "options": ["SQL 注入", "XSS 脚本执行", "端口扫描", "DNS 污染"],
+        "answer": "1",
+        "explanation": "未转义的用户输入进入 innerHTML 可能执行恶意脚本，造成 XSS。",
+        "difficulty": "medium",
+        "category": "xss",
+    },
+    {
+        "game_name": "xss-hunter",
+        "question": "防御存储型 XSS 时，下面哪项最关键？",
+        "options": ["只限制用户名长度", "输出时按上下文转义并避免危险 HTML", "把数据库端口关闭", "只在前端弹窗提醒"],
+        "answer": "1",
+        "explanation": "XSS 防御核心是输出编码、HTML 清洗和安全渲染，不能只依赖提示或长度限制。",
+        "difficulty": "medium",
+        "category": "xss",
+    },
+    {
+        "game_name": "vulnerability-scan",
+        "question": "日志中出现 Authorization: Bearer eyJ... 被完整打印，最明显的问题是？",
+        "options": ["敏感信息泄露", "SQL 注入", "图片缓存过期", "CSS 加载慢"],
+        "answer": "0",
+        "explanation": "认证 token 属于敏感凭据，不应完整进入日志，否则可能被用来冒充用户。",
+        "difficulty": "medium",
+        "category": "log-audit",
+    },
+    {
+        "game_name": "vulnerability-scan",
+        "question": "代码片段 const password = 'Admin123!' 暴露在前端仓库中，应该如何处理？",
+        "options": ["换个变量名", "把密钥移到环境变量并轮换已泄露密码", "压缩 JS 文件即可", "只加一行注释"],
+        "answer": "1",
+        "explanation": "硬编码密码泄露后需要移出代码、改用环境变量或密钥管理，并立即轮换旧密码。",
+        "difficulty": "medium",
+        "category": "secret-leak",
+    },
+    {
+        "game_name": "packet-detective",
+        "question": "抓包中看到 HTTP 明文请求 /login 携带 password=123456，最主要的风险是？",
+        "options": ["TLS 证书太新", "敏感信息可被中间人读取", "数据库索引失效", "浏览器缓存不足"],
+        "answer": "1",
+        "explanation": "HTTP 明文传输登录凭据会被同链路攻击者嗅探，应使用 HTTPS。",
+        "difficulty": "medium",
+        "category": "packet-analysis",
+    },
+    {
+        "game_name": "packet-detective",
+        "question": "一段访问日志中同一 IP 在 10 秒内尝试 200 次 /auth/login，最像什么行为？",
+        "options": ["正常页面预加载", "暴力破解或撞库", "CDN 缓存命中", "CSS 热更新"],
+        "answer": "1",
+        "explanation": "短时间大量登录尝试通常意味着暴力破解或撞库，应考虑限流、验证码和告警。",
+        "difficulty": "medium",
+        "category": "packet-analysis",
+    },
 ]
 
 
@@ -99,8 +194,14 @@ def ensure_seed_data() -> None:
                 )
             )
 
-        if db.scalar(select(SecurityGameQuestion.id)) is None:
-            for item in SECURITY_QUESTIONS:
+        for item in SECURITY_QUESTIONS:
+            exists = db.scalar(
+                select(SecurityGameQuestion.id).where(
+                    SecurityGameQuestion.game_name == item["game_name"],
+                    SecurityGameQuestion.question == item["question"],
+                )
+            )
+            if exists is None:
                 db.add(
                     SecurityGameQuestion(
                         game_name=item["game_name"],

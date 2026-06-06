@@ -86,11 +86,12 @@ blog.ai.summarize_text
 blog.ai.summarize_post
 blog.ai.draft_post
 blog.ai.generate_security_question
+blog.ai.generate_digest
 ```
 
 ## DeepSeek AI 配置
 
-项目支持通过 DeepSeek API 提供 AI 总结、文章草稿和安全题目生成能力。API Key 只应配置在服务器 `.env` 中，不要提交到 GitHub。
+项目支持通过 DeepSeek API 提供文章 AI 摘要、文章草稿、安全题目生成、每日新闻/大会、GitHub Trending、AI 技术论文和 LLM Security Digest。API Key 只应配置在服务器 `.env` 中，不要提交到 GitHub。
 
 服务器 `/opt/zenith-station/.env` 增加：
 

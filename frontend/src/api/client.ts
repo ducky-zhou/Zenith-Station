@@ -1,4 +1,4 @@
-import type { Comment, Post, Profile, ScoreRow, SecurityGameResult, SecurityQuestion, Stats, TokenResponse, User } from "../types";
+import type { AiText, Comment, Post, Profile, ScoreRow, SecurityGameResult, SecurityQuestion, Stats, TokenResponse, User } from "../types";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "/api";
 export { API_BASE };
@@ -118,6 +118,12 @@ export const api = {
       body: JSON.stringify({ answers, duration_seconds })
     }),
   leaderboard: (gameName: string) => request<ScoreRow[]>(`/security-games/${gameName}/leaderboard`, { auth: false }),
+  postAiSummary: (postId: string | number) => request<AiText>(`/ai/posts/${postId}/summary`, { auth: false }),
+  generateSecurityQuestion: (topic: string, difficulty: "easy" | "medium" | "hard" = "medium") =>
+    request<AiText>("/ai/security-question", {
+      method: "POST",
+      body: JSON.stringify({ topic, difficulty })
+    }),
   stats: () => request<Stats>("/stats"),
   track: (event: string, path: string, extra: Record<string, unknown> = {}) =>
     request<{ ok: boolean }>("/track", {

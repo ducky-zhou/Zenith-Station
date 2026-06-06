@@ -88,3 +88,24 @@ async def generate_security_question(topic: str, difficulty: str) -> str:
         "\noptions 必须是 4 个字符串，answer 是正确选项下标 0-3。"
     )
     return await call_deepseek([{"role": "user", "content": prompt}], temperature=0.4)
+
+
+async def generate_digest(kind: str, source_text: str, focus: str) -> str:
+    labels = {
+        "daily-news": "每日技术新闻 / 安全大会",
+        "github-trending": "GitHub Trending 自动解读",
+        "papers": "AI 技术论文 Digest",
+        "llm-security": "LLM Security 方向新闻整理",
+    }
+    label = labels.get(kind, kind)
+    material = source_text.strip() or "未提供外部素材。请基于该方向给出一份可人工补充来源链接的结构化简报模板。"
+    prompt = (
+        f"请生成一份「{label}」中文 Digest，关注方向：{focus}。\n"
+        "输出要求：\n"
+        "1. 5 条以内重点摘要；\n"
+        "2. 每条包含 why it matters；\n"
+        "3. 给出适合发布到个人博客的标题；\n"
+        "4. 最后列出下一步可验证的来源清单。\n\n"
+        f"素材：\n{material}"
+    )
+    return await call_deepseek([{"role": "user", "content": prompt}], temperature=0.45)

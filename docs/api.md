@@ -102,17 +102,21 @@ POST /track
 
 ```text
 GET  /ai/enabled
+GET  /ai/posts/{post_id}/summary
 POST /ai/summarize
 POST /ai/summarize-post
 POST /ai/draft-post
 POST /ai/security-question
+POST /ai/digest/{kind}
 ```
 
 说明：
 
 - `GET /ai/enabled` 可公开访问，用于判断后端是否配置 DeepSeek API Key
+- `GET /ai/posts/{post_id}/summary` 可公开访问，按文章更新时间和模型在后端内存缓存摘要
 - 其他 AI 接口需要管理员权限，避免 API Key 被滥用产生费用
 - DeepSeek Key 只配置在后端环境变量中，不应出现在前端代码或 Git 仓库里
+- `POST /ai/digest/{kind}` 支持 `daily-news`、`github-trending`、`papers`、`llm-security`
 
 环境变量：
 
@@ -168,6 +172,7 @@ blog.ai.summarize_text              # admin, DeepSeek
 blog.ai.summarize_post              # admin, DeepSeek
 blog.ai.draft_post                  # admin, DeepSeek
 blog.ai.generate_security_question  # admin, DeepSeek
+blog.ai.generate_digest             # admin, DeepSeek
 ```
 
 示例：

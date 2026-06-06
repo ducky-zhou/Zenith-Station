@@ -126,6 +126,19 @@ TOOLS = [
             "difficulty": {"type": "string", "enum": ["easy", "medium", "hard"], "default": "easy"},
         },
     ),
+    tool_schema(
+        "blog.ai.generate_digest",
+        "Generate an AI automation digest with DeepSeek. Requires an admin token.",
+        {
+            "kind": {
+                "type": "string",
+                "enum": ["daily-news", "github-trending", "papers", "llm-security"],
+                "default": "daily-news",
+            },
+            "source_text": {"type": "string", "default": ""},
+            "focus": {"type": "string", "default": "Web security and AI engineering"},
+        },
+    ),
 ]
 
 
@@ -295,6 +308,13 @@ async def run_tool(name: str, arguments: dict[str, Any], user: User, db: Session
         topic = str(arguments.get("topic", "phishing"))
         difficulty = str(arguments.get("difficulty", "easy"))
         return text_result({"question": await deepseek.generate_security_question(topic, difficulty)})
+
+    if name == "blog.ai.generate_digest":
+        require_admin(user)
+        kind = str(arguments.get("kind", "daily-news"))
+        source_text = str(arguments.get("source_text", ""))
+        focus = str(arguments.get("focus", "Web security and AI engineering"))
+        return text_result({"digest": await deepseek.generate_digest(kind, source_text, focus)})
 
     return text_result({"error": f"Unknown tool: {name}"}, is_error=True)
 

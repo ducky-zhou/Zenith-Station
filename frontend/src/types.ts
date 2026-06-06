@@ -97,3 +97,9 @@ export type Stats = {
   top_commented_posts: PostStat[];
   top_favorited_posts: PostStat[];
 };
+
+export type AiText = {
+  provider: string;
+  model: string;
+  text: string;
+};

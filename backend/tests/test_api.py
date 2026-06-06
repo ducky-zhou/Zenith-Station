@@ -17,11 +17,30 @@ def test_posts_are_public():
     assert isinstance(response.json(), list)
 
 
+def test_public_ai_summary_uses_deepseek_config():
+    with TestClient(app) as client:
+        posts = client.get("/api/posts")
+        post_id = posts.json()[0]["id"]
+        response = client.get(f"/api/ai/posts/{post_id}/summary")
+    assert response.status_code == 503
+    assert response.json()["detail"] == "DeepSeek API is not configured"
+
+
 def test_security_questions_do_not_expose_answers():
     with TestClient(app) as client:
         response = client.get("/api/security-games/phishing-detective/questions")
     assert response.status_code == 200
     assert "answer" not in response.json()[0]
+
+
+def test_security_games_include_extended_missions():
+    with TestClient(app) as client:
+        response = client.get("/api/security-games")
+    assert response.status_code == 200
+    names = set(response.json())
+    assert "xss-hunter" in names
+    assert "vulnerability-scan" in names
+    assert "packet-detective" in names
 
 
 def test_security_game_requires_all_answers():
@@ -110,6 +129,7 @@ def test_mcp_lists_and_calls_tools():
         assert "blog.posts.list" in tool_names
         assert "blog.posts.create" in tool_names
         assert "blog.ai.summarize_post" in tool_names
+        assert "blog.ai.generate_digest" in tool_names
 
         posts = client.post(
             "/api/mcp",
