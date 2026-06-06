@@ -1268,23 +1268,56 @@ a.leaderboard-row:hover {
   gap: 8px;
 }
 
-.mission-chip-grid span {
-  padding: 5px 8px;
+.mission-chip-grid button {
+  min-height: 34px;
+  padding: 6px 10px;
   color: var(--text-muted);
   font-size: 0.78rem;
+  text-align: left;
   background: rgba(18, 38, 66, 0.55);
   border: 1px solid rgba(32, 58, 95, 0.78);
   border-radius: var(--radius);
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
 }
 
-.mission-chip-grid span.available {
+.mission-chip-grid button.available {
   color: var(--text);
 }
 
-.mission-chip-grid span.active {
+.mission-chip-grid button.available:hover,
+.mission-chip-grid button.available:focus-visible {
+  color: var(--accent);
+  background: rgba(0, 212, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.36);
+  transform: translateY(-1px);
+}
+
+.mission-chip-grid button.active {
   color: var(--accent);
   background: rgba(0, 212, 255, 0.1);
   border-color: rgba(0, 212, 255, 0.46);
+}
+
+.mission-chip-grid button.active:focus-visible {
+  outline: 2px solid rgba(0, 212, 255, 0.22);
+  outline-offset: 2px;
+}
+
+.mission-chip-grid button.coming-soon {
+  color: rgba(159, 180, 208, 0.72);
+  background:
+    linear-gradient(135deg, rgba(18, 38, 66, 0.52), rgba(13, 27, 47, 0.52)),
+    rgba(18, 38, 66, 0.42);
+  border-style: dashed;
+}
+
+.mission-chip-grid button:disabled {
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 .security-lab-layout {

@@ -62,6 +62,14 @@ export function SecurityGame() {
       .catch((err: Error) => setError(err.message));
   };
 
+  const selectGame = (name: string) => {
+    if (name === gameName) {
+      return;
+    }
+    setGameName(name);
+    loadGame(name);
+  };
+
   useEffect(() => {
     api.track("page_view", "/security-game");
     api.gameNames().then((names) => {
@@ -117,8 +125,7 @@ export function SecurityGame() {
           <select
             value={gameName}
             onChange={(event) => {
-              setGameName(event.target.value);
-              loadGame(event.target.value);
+              selectGame(event.target.value);
             }}
           >
             {games.map((game) => (
@@ -128,11 +135,23 @@ export function SecurityGame() {
             ))}
           </select>
           <div className="mission-chip-grid" aria-label="planned security missions">
-            {missionCatalog.map((item) => (
-              <span key={item.id} className={item.id === gameName ? "active" : availableMissionNames.has(item.id) ? "available" : ""}>
-                {item.title}
-              </span>
-            ))}
+            {missionCatalog.map((item) => {
+              const isActive = item.id === gameName;
+              const isAvailable = availableMissionNames.has(item.id);
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={isActive ? "active" : isAvailable ? "available" : "coming-soon"}
+                  disabled={!isAvailable}
+                  aria-pressed={isActive}
+                  title={isAvailable ? item.description : `${item.description} · coming soon`}
+                  onClick={() => selectGame(item.id)}
+                >
+                  {item.title}
+                </button>
+              );
+            })}
           </div>
         </div>
       </header>
