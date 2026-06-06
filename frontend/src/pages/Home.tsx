@@ -105,7 +105,7 @@ export function Home() {
               </div>
               <div>
                 <dt>os</dt>
-                <dd>Arch Linux</dd>
+                <dd>macOS / Kali Linux</dd>
               </div>
               <div>
                 <dt>uptime</dt>
