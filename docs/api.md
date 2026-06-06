@@ -98,6 +98,40 @@ POST /track
 }
 ```
 
+## DeepSeek AI
+
+```text
+GET  /ai/enabled
+POST /ai/summarize
+POST /ai/summarize-post
+POST /ai/draft-post
+POST /ai/security-question
+```
+
+说明：
+
+- `GET /ai/enabled` 可公开访问，用于判断后端是否配置 DeepSeek API Key
+- 其他 AI 接口需要管理员权限，避免 API Key 被滥用产生费用
+- DeepSeek Key 只配置在后端环境变量中，不应出现在前端代码或 Git 仓库里
+
+环境变量：
+
+```text
+DEEPSEEK_API_KEY=你的 DeepSeek API Key
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-v4-flash
+DEEPSEEK_TIMEOUT_SECONDS=30
+```
+
+请求示例：
+
+```json
+{
+  "text": "这里放需要总结的文章内容",
+  "style": "concise"
+}
+```
+
 ## MCP Server
 
 ```text
@@ -130,6 +164,10 @@ blog.posts.create    # admin
 blog.posts.update    # admin
 blog.posts.delete    # admin
 blog.stats.get       # admin
+blog.ai.summarize_text              # admin, DeepSeek
+blog.ai.summarize_post              # admin, DeepSeek
+blog.ai.draft_post                  # admin, DeepSeek
+blog.ai.generate_security_question  # admin, DeepSeek
 ```
 
 示例：

@@ -11,6 +11,7 @@ from app.api.posts import with_counts, with_counts_many
 from app.db.session import get_db
 from app.models import Comment, Event, Favorite, Like, Post, Profile, User
 from app.schemas.post import PostCreate, PostUpdate
+from app.services import deepseek
 
 
 router = APIRouter(prefix="/mcp", tags=["mcp"])
@@ -89,6 +90,42 @@ TOOLS = [
         "blog.stats.get",
         "Read blog analytics summary. Requires an admin token.",
     ),
+    tool_schema(
+        "blog.ai.summarize_text",
+        "Summarize arbitrary text with DeepSeek. Requires an admin token.",
+        {
+            "text": {"type": "string", "minLength": 20, "maxLength": 20000},
+            "style": {"type": "string", "default": "concise"},
+        },
+        ["text"],
+    ),
+    tool_schema(
+        "blog.ai.summarize_post",
+        "Summarize a blog post with DeepSeek. Requires an admin token.",
+        {
+            "post_id": {"type": "integer", "minimum": 1},
+            "style": {"type": "string", "default": "concise"},
+        },
+        ["post_id"],
+    ),
+    tool_schema(
+        "blog.ai.draft_post",
+        "Draft a Markdown blog post with DeepSeek. Requires an admin token.",
+        {
+            "title": {"type": "string", "minLength": 1, "maxLength": 200},
+            "keywords": {"type": "array", "items": {"type": "string"}, "default": []},
+            "tone": {"type": "string", "default": "technical notebook"},
+        },
+        ["title"],
+    ),
+    tool_schema(
+        "blog.ai.generate_security_question",
+        "Generate a Security Lab challenge question with DeepSeek. Requires an admin token.",
+        {
+            "topic": {"type": "string", "default": "phishing"},
+            "difficulty": {"type": "string", "enum": ["easy", "medium", "hard"], "default": "easy"},
+        },
+    ),
 ]
 
 
@@ -139,7 +176,7 @@ def serialize_profile(profile: Profile | None) -> dict[str, Any] | None:
     }
 
 
-def run_tool(name: str, arguments: dict[str, Any], user: User, db: Session) -> dict[str, Any]:
+async def run_tool(name: str, arguments: dict[str, Any], user: User, db: Session) -> dict[str, Any]:
     if name == "blog.profile.get":
         return text_result(serialize_profile(db.get(Profile, 1)))
 
@@ -228,6 +265,37 @@ def run_tool(name: str, arguments: dict[str, Any], user: User, db: Session) -> d
             }
         )
 
+    if name == "blog.ai.summarize_text":
+        require_admin(user)
+        text = str(arguments.get("text", ""))
+        style = str(arguments.get("style", "concise"))
+        return text_result({"summary": await deepseek.summarize_text(text, style)})
+
+    if name == "blog.ai.summarize_post":
+        require_admin(user)
+        post_id = int(arguments.get("post_id", 0))
+        post = db.get(Post, post_id)
+        if post is None:
+            return text_result({"error": "Post not found"}, is_error=True)
+        style = str(arguments.get("style", "concise"))
+        content = f"# {post.title}\n\n{post.summary}\n\n{post.content}"
+        return text_result({"post_id": post_id, "summary": await deepseek.summarize_text(content, style)})
+
+    if name == "blog.ai.draft_post":
+        require_admin(user)
+        title = str(arguments.get("title", ""))
+        keywords = arguments.get("keywords") or []
+        if not isinstance(keywords, list):
+            return text_result({"error": "keywords must be an array"}, is_error=True)
+        tone = str(arguments.get("tone", "technical notebook"))
+        return text_result({"draft": await deepseek.draft_post(title, [str(item) for item in keywords], tone)})
+
+    if name == "blog.ai.generate_security_question":
+        require_admin(user)
+        topic = str(arguments.get("topic", "phishing"))
+        difficulty = str(arguments.get("difficulty", "easy"))
+        return text_result({"question": await deepseek.generate_security_question(topic, difficulty)})
+
     return text_result({"error": f"Unknown tool: {name}"}, is_error=True)
 
 
@@ -243,7 +311,7 @@ def mcp_info():
 
 
 @router.post("")
-def mcp_rpc(
+async def mcp_rpc(
     payload: dict[str, Any],
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -275,6 +343,6 @@ def mcp_rpc(
             return rpc_error(request_id, -32602, "tools/call requires params.name")
         if not isinstance(arguments, dict):
             return rpc_error(request_id, -32602, "tools/call params.arguments must be an object")
-        return rpc_result(request_id, run_tool(name, arguments, current_user, db))
+        return rpc_result(request_id, await run_tool(name, arguments, current_user, db))
 
     return rpc_error(request_id, -32601, f"Method not found: {method}")

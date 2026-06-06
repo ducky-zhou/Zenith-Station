@@ -82,7 +82,39 @@ blog.posts.create
 blog.posts.update
 blog.posts.delete
 blog.stats.get
+blog.ai.summarize_text
+blog.ai.summarize_post
+blog.ai.draft_post
+blog.ai.generate_security_question
 ```
+
+## DeepSeek AI 配置
+
+项目支持通过 DeepSeek API 提供 AI 总结、文章草稿和安全题目生成能力。API Key 只应配置在服务器 `.env` 中，不要提交到 GitHub。
+
+服务器 `/opt/zenith-station/.env` 增加：
+
+```env
+DEEPSEEK_API_KEY=你的 DeepSeek API Key
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+DEEPSEEK_MODEL=deepseek-v4-flash
+DEEPSEEK_TIMEOUT_SECONDS=30
+```
+
+重启服务：
+
+```bash
+cd /opt/zenith-station
+docker compose up -d --build
+```
+
+检查是否启用：
+
+```text
+http://服务器公网IP/api/ai/enabled
+```
+
+未配置 Key 时，AI 写作相关接口会返回 `503 DeepSeek API is not configured`，不会影响博客、评论、点赞、安全闯关和 MCP 基础工具。
 
 启动：
 

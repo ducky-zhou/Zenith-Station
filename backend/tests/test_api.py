@@ -59,6 +59,32 @@ def test_github_login_start_requires_config():
     assert response.status_code == 503
 
 
+def test_deepseek_ai_is_disabled_without_config():
+    with TestClient(app) as client:
+        response = client.get("/api/ai/enabled")
+    assert response.status_code == 200
+    assert response.json()["enabled"] is False
+
+
+def test_deepseek_ai_requires_admin_and_config():
+    with TestClient(app) as client:
+        unauthenticated = client.post("/api/ai/summarize", json={"text": "x" * 30})
+        assert unauthenticated.status_code == 401
+
+        login = client.post(
+            "/api/auth/login",
+            json={"email": "admin@example.com", "password": "ChangeMe123!"},
+        )
+        token = login.json()["access_token"]
+        response = client.post(
+            "/api/ai/summarize",
+            headers={"Authorization": f"Bearer {token}"},
+            json={"text": "This is a long enough note about web security and AI tooling."},
+        )
+    assert response.status_code == 503
+    assert response.json()["detail"] == "DeepSeek API is not configured"
+
+
 def test_mcp_requires_authentication():
     with TestClient(app) as client:
         response = client.post("/api/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"})
@@ -83,6 +109,7 @@ def test_mcp_lists_and_calls_tools():
         tool_names = [tool["name"] for tool in tools.json()["result"]["tools"]]
         assert "blog.posts.list" in tool_names
         assert "blog.posts.create" in tool_names
+        assert "blog.ai.summarize_post" in tool_names
 
         posts = client.post(
             "/api/mcp",
