@@ -53,5 +53,13 @@ jobs:
           git reset --hard FETCH_HEAD
           docker compose up -d --build
           docker compose ps
-          curl -fsS http://127.0.0.1/api/health
+          for attempt in $(seq 1 12); do
+            if curl -fsS http://127.0.0.1/api/health; then
+              exit 0
+            fi
+            echo "Health check failed; retrying in 5s ($attempt/12)."
+            sleep 5
+          done
+          docker compose logs --tail=120 backend nginx
+          exit 1
           EOF
