@@ -4,10 +4,18 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user
+from app.api.deps import get_current_user, require_admin
 from app.db.session import get_db
 from app.models import SecurityGameQuestion, SecurityGameScore, User
-from app.schemas.game import ArcadeScoreSubmit, SecurityGameResult, SecurityGameResultItem, SecurityGameScoreRead, SecurityGameSubmit, SecurityQuestionRead
+from app.schemas.game import (
+    ArcadeScoreSubmit,
+    SecurityGameResult,
+    SecurityGameResultItem,
+    SecurityGameScoreRead,
+    SecurityGameSubmit,
+    SecurityQuestionCreate,
+    SecurityQuestionRead,
+)
 
 
 router = APIRouter(prefix="/security-games", tags=["security-games"])
@@ -41,6 +49,37 @@ def get_questions(game_name: str, db: Session = Depends(get_db)):
         )
         for item in questions
     ]
+
+
+@router.post("/questions", response_model=SecurityQuestionRead, status_code=status.HTTP_201_CREATED)
+def create_question(
+    payload: SecurityQuestionCreate,
+    _: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    if payload.answer not in {str(index) for index in range(len(payload.options))}:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="answer must be an option index")
+
+    question = SecurityGameQuestion(
+        game_name=payload.game_name,
+        question=payload.question,
+        options_json=json.dumps(payload.options, ensure_ascii=False),
+        answer=payload.answer,
+        explanation=payload.explanation,
+        difficulty=payload.difficulty,
+        category=payload.category,
+    )
+    db.add(question)
+    db.commit()
+    db.refresh(question)
+    return SecurityQuestionRead(
+        id=question.id,
+        game_name=question.game_name,
+        question=question.question,
+        options=json.loads(question.options_json),
+        difficulty=question.difficulty,
+        category=question.category,
+    )
 
 
 @router.post("/{game_name}/submit", response_model=SecurityGameResult)

@@ -12,6 +12,16 @@ class SecurityQuestionRead(BaseModel):
     category: str
 
 
+class SecurityQuestionCreate(BaseModel):
+    game_name: str = Field(min_length=1, max_length=80)
+    question: str = Field(min_length=1, max_length=2000)
+    options: list[str] = Field(min_length=2, max_length=6)
+    answer: str = Field(min_length=1, max_length=20)
+    explanation: str = Field(default="", max_length=2000)
+    difficulty: str = Field(default="easy", pattern="^(easy|medium|hard)$")
+    category: str = Field(default="web-security", max_length=80)
+
+
 class SecurityGameAnswer(BaseModel):
     question_id: int
     answer: str = Field(min_length=1, max_length=20)

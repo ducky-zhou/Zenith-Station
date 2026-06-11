@@ -69,6 +69,37 @@ def test_arcade_score_requires_login_and_updates_leaderboard():
     assert any(row["score"] == 420 for row in leaderboard.json())
 
 
+def test_admin_can_create_security_question():
+    payload = {
+        "game_name": "xss-hunter",
+        "question": "Which payload should be blocked by output encoding?",
+        "options": ["plain text", "<script>alert(1)</script>", "normal search", "static asset"],
+        "answer": "1",
+        "explanation": "script tags in user-controlled output are an XSS signal.",
+        "difficulty": "medium",
+        "category": "xss",
+    }
+    with TestClient(app) as client:
+        unauthenticated = client.post("/api/security-games/questions", json=payload)
+        login = client.post(
+            "/api/auth/login",
+            json={"email": "admin@example.com", "password": "ChangeMe123!"},
+        )
+        token = login.json()["access_token"]
+        created = client.post(
+            "/api/security-games/questions",
+            headers={"Authorization": f"Bearer {token}"},
+            json=payload,
+        )
+        questions = client.get("/api/security-games/xss-hunter/questions")
+
+    assert unauthenticated.status_code == 401
+    assert created.status_code == 201
+    assert created.json()["game_name"] == "xss-hunter"
+    assert questions.status_code == 200
+    assert any(item["question"] == payload["question"] for item in questions.json())
+
+
 def test_security_game_requires_all_answers():
     with TestClient(app) as client:
         login = client.post(

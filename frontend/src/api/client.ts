@@ -1,4 +1,17 @@
-import type { AiText, Comment, Post, Profile, ScoreRow, SecurityGameResult, SecurityQuestion, Stats, TokenResponse, User } from "../types";
+import type {
+  AiDigestKind,
+  AiText,
+  Comment,
+  Post,
+  Profile,
+  ScoreRow,
+  SecurityGameResult,
+  SecurityQuestion,
+  SecurityQuestionDraft,
+  Stats,
+  TokenResponse,
+  User
+} from "../types";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "/api";
 export { API_BASE };
@@ -124,10 +137,31 @@ export const api = {
       body: JSON.stringify(payload)
     }),
   postAiSummary: (postId: string | number) => request<AiText>(`/ai/posts/${postId}/summary`, { auth: false }),
+  aiEnabled: () => request<{ enabled: boolean; provider: string; model: string }>("/ai/enabled", { auth: false }),
+  summarizeText: (text: string, style = "concise") =>
+    request<AiText>("/ai/summarize", {
+      method: "POST",
+      body: JSON.stringify({ text, style })
+    }),
+  draftPost: (title: string, keywords: string[], tone = "technical notebook") =>
+    request<AiText>("/ai/draft-post", {
+      method: "POST",
+      body: JSON.stringify({ title, keywords, tone })
+    }),
+  generateDigest: (kind: AiDigestKind, source_text: string, focus: string) =>
+    request<AiText>(`/ai/digest/${kind}`, {
+      method: "POST",
+      body: JSON.stringify({ source_text, focus })
+    }),
   generateSecurityQuestion: (topic: string, difficulty: "easy" | "medium" | "hard" = "medium") =>
     request<AiText>("/ai/security-question", {
       method: "POST",
       body: JSON.stringify({ topic, difficulty })
+    }),
+  createSecurityQuestion: (payload: SecurityQuestionDraft) =>
+    request<SecurityQuestion>("/security-games/questions", {
+      method: "POST",
+      body: JSON.stringify(payload)
     }),
   stats: () => request<Stats>("/stats"),
   track: (event: string, path: string, extra: Record<string, unknown> = {}) =>

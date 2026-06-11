@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { About } from "./pages/About";
+import { AdminAi } from "./pages/AdminAi";
 import { AdminProfile } from "./pages/AdminProfile";
 import { AdminPosts } from "./pages/AdminPosts";
 import { AdminStats } from "./pages/AdminStats";
@@ -40,6 +41,7 @@ export function App() {
           <Route path="admin/posts/:id/edit" element={<PostEditor />} />
           <Route path="admin/profile" element={<AdminProfile />} />
           <Route path="admin/stats" element={<AdminStats />} />
+          <Route path="admin/ai" element={<AdminAi />} />
         </Route>
       </Route>
     </Routes>

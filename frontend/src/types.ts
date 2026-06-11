@@ -103,3 +103,15 @@ export type AiText = {
   model: string;
   text: string;
 };
+
+export type AiDigestKind = "daily-news" | "github-trending" | "papers" | "llm-security";
+
+export type SecurityQuestionDraft = {
+  game_name: string;
+  question: string;
+  options: string[];
+  answer: string;
+  explanation: string;
+  difficulty: "easy" | "medium" | "hard";
+  category: string;
+};

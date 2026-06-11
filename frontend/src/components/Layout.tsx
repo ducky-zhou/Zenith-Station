@@ -1,4 +1,4 @@
-import { BarChart3, Bomb, BookOpen, Gamepad2, Github, Globe2, Home, Lock, LogOut, Mail, Radar, Rss, Shield, UserRound } from "lucide-react";
+import { BarChart3, Bomb, BookOpen, Bot, Gamepad2, Github, Globe2, Home, Lock, LogOut, Mail, Radar, Rss, Shield, UserRound } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import { useAuth } from "../auth";
@@ -51,6 +51,10 @@ export function Layout() {
               <NavLink to="/admin/stats" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
                 <BarChart3 aria-hidden="true" />
                 <span>数据统计</span>
+              </NavLink>
+              <NavLink to="/admin/ai" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+                <Bot aria-hidden="true" />
+                <span>AI 后台</span>
               </NavLink>
             </>
           )}
