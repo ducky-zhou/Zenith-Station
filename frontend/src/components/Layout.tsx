@@ -1,4 +1,4 @@
-import { BarChart3, Bomb, BookOpen, Gamepad2, Github, Globe2, Home, Lock, LogOut, Mail, Rss, Shield, UserRound } from "lucide-react";
+import { BarChart3, Bomb, BookOpen, Gamepad2, Github, Globe2, Home, Lock, LogOut, Mail, Radar, Rss, Shield, UserRound } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import { useAuth } from "../auth";
@@ -8,6 +8,7 @@ const navItems = [
   { to: "/posts", label: "文章", icon: BookOpen },
   { to: "/about", label: "关于", icon: UserRound },
   { to: "/security-game", label: "安全闯关", icon: Shield },
+  { to: "/security-arcade", label: "安全街机", icon: Radar },
   { to: "/minesweeper", label: "经典扫雷", icon: Bomb }
 ];
 

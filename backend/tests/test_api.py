@@ -43,6 +43,32 @@ def test_security_games_include_extended_missions():
     assert "packet-detective" in names
 
 
+def test_arcade_score_requires_login_and_updates_leaderboard():
+    with TestClient(app) as client:
+        unauthenticated = client.post(
+            "/api/security-games/web-firewall-interceptor/score",
+            json={"score": 420, "correct_count": 4, "total_count": 5, "duration_seconds": 30},
+        )
+        assert unauthenticated.status_code == 401
+
+        login = client.post(
+            "/api/auth/login",
+            json={"email": "admin@example.com", "password": "ChangeMe123!"},
+        )
+        token = login.json()["access_token"]
+        response = client.post(
+            "/api/security-games/web-firewall-interceptor/score",
+            headers={"Authorization": f"Bearer {token}"},
+            json={"score": 420, "correct_count": 4, "total_count": 5, "duration_seconds": 30},
+        )
+        leaderboard = client.get("/api/security-games/web-firewall-interceptor/leaderboard")
+
+    assert response.status_code == 201
+    assert response.json()["score"] == 420
+    assert leaderboard.status_code == 200
+    assert any(row["score"] == 420 for row in leaderboard.json())
+
+
 def test_security_game_requires_all_answers():
     with TestClient(app) as client:
         login = client.post(

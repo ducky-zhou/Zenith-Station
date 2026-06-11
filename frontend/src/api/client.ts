@@ -118,6 +118,11 @@ export const api = {
       body: JSON.stringify({ answers, duration_seconds })
     }),
   leaderboard: (gameName: string) => request<ScoreRow[]>(`/security-games/${gameName}/leaderboard`, { auth: false }),
+  submitArcadeScore: (gameName: string, payload: { score: number; correct_count: number; total_count: number; duration_seconds: number }) =>
+    request<ScoreRow>(`/security-games/${gameName}/score`, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    }),
   postAiSummary: (postId: string | number) => request<AiText>(`/ai/posts/${postId}/summary`, { auth: false }),
   generateSecurityQuestion: (topic: string, difficulty: "easy" | "medium" | "hard" = "medium") =>
     request<AiText>("/ai/security-question", {

@@ -1630,6 +1630,344 @@ a.leaderboard-row:hover {
   border-radius: var(--radius);
 }
 
+.security-arcade-page .arcade-hero {
+  grid-template-columns: minmax(0, 1fr) 380px;
+}
+
+.arcade-switcher {
+  display: grid;
+  gap: 10px;
+}
+
+.arcade-switcher button {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 6px 12px;
+  align-items: center;
+  min-height: 86px;
+  color: var(--text-muted);
+  text-align: left;
+  background: rgba(18, 38, 66, 0.58);
+  border: 1px solid rgba(32, 58, 95, 0.8);
+  border-radius: var(--radius);
+  padding: 13px;
+}
+
+.arcade-switcher button svg {
+  grid-row: span 2;
+  width: 24px;
+  height: 24px;
+  color: var(--accent);
+}
+
+.arcade-switcher button strong {
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.arcade-switcher button span {
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.arcade-switcher button:hover,
+.arcade-switcher button.active {
+  background: rgba(0, 212, 255, 0.09);
+  border-color: rgba(0, 212, 255, 0.48);
+}
+
+.arcade-board {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  background:
+    linear-gradient(180deg, rgba(0, 212, 255, 0.04), transparent 42%),
+    rgba(13, 27, 47, 0.92);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.arcade-board-head,
+.request-meta,
+.packet-toolbar {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.arcade-board-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(32, 58, 95, 0.72);
+  padding-bottom: 12px;
+}
+
+.arcade-board-head strong {
+  color: var(--accent);
+}
+
+.request-card {
+  display: grid;
+  gap: 16px;
+  min-height: 310px;
+  align-content: center;
+  padding: 18px;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(0, 212, 255, 0.12), transparent 34%),
+    rgba(7, 17, 31, 0.82);
+  border: 1px solid rgba(0, 212, 255, 0.18);
+  border-radius: var(--radius);
+}
+
+.request-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.request-meta span {
+  padding: 5px 8px;
+  background: rgba(18, 38, 66, 0.9);
+  border: 1px solid rgba(32, 58, 95, 0.82);
+  border-radius: 6px;
+}
+
+.request-card code,
+.packet-inspector code {
+  color: var(--text);
+  overflow-wrap: anywhere;
+  background: rgba(4, 11, 21, 0.86);
+  border: 1px solid rgba(32, 58, 95, 0.78);
+  border-radius: var(--radius);
+}
+
+.request-card code {
+  padding: 16px;
+  font-size: clamp(1.1rem, 2.5vw, 1.7rem);
+}
+
+.request-card p,
+.packet-inspector p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.firewall-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.firewall-actions button,
+.packet-inspector button,
+.packet-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text);
+  background: rgba(18, 38, 66, 0.78);
+  border: 1px solid rgba(32, 58, 95, 0.9);
+  border-radius: var(--radius);
+}
+
+.firewall-actions button {
+  min-height: 48px;
+}
+
+.firewall-actions button:hover,
+.packet-inspector button:hover,
+.packet-toolbar button:hover,
+.packet-toolbar button.active {
+  color: var(--accent);
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.44);
+}
+
+.event-stream {
+  display: grid;
+  gap: 8px;
+}
+
+.event-stream div {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr) max-content;
+  gap: 10px;
+  align-items: center;
+  color: var(--text-muted);
+  padding: 9px 10px;
+  background: rgba(18, 38, 66, 0.6);
+  border: 1px solid rgba(32, 58, 95, 0.76);
+  border-radius: 6px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+}
+
+.event-stream div.good {
+  border-color: rgba(126, 231, 135, 0.38);
+}
+
+.event-stream div.bad {
+  border-color: rgba(255, 123, 114, 0.44);
+}
+
+.event-stream strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arcade-complete {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  min-height: 310px;
+  color: var(--text);
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  border-radius: var(--radius);
+}
+
+.arcade-complete svg {
+  width: 34px;
+  height: 34px;
+  color: var(--accent);
+}
+
+.arcade-complete span {
+  color: var(--text-muted);
+}
+
+.packet-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  color: var(--text-muted);
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(32, 58, 95, 0.72);
+}
+
+.packet-toolbar span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-right: 6px;
+  color: var(--accent);
+}
+
+.packet-toolbar svg {
+  width: 16px;
+  height: 16px;
+}
+
+.packet-toolbar button {
+  min-height: 32px;
+  padding: 6px 10px;
+  font-family: inherit;
+}
+
+.packet-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  gap: 16px;
+  align-items: start;
+}
+
+.packet-list {
+  display: grid;
+  gap: 8px;
+}
+
+.packet-list button {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 4px 10px;
+  min-height: 62px;
+  color: var(--text-muted);
+  text-align: left;
+  background: rgba(18, 38, 66, 0.62);
+  border: 1px solid rgba(32, 58, 95, 0.78);
+  border-radius: var(--radius);
+  padding: 10px;
+}
+
+.packet-list button span,
+.packet-list button small {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.packet-list button span {
+  color: var(--accent);
+  font-size: 0.78rem;
+}
+
+.packet-list button strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.packet-list button small {
+  grid-column: 2;
+  overflow: hidden;
+  font-size: 0.74rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.packet-list button.active,
+.packet-list button:hover {
+  background: rgba(0, 212, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.36);
+}
+
+.packet-list button.marked {
+  border-color: rgba(255, 204, 102, 0.58);
+}
+
+.packet-list button.truth {
+  border-color: rgba(126, 231, 135, 0.48);
+}
+
+.packet-inspector {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(7, 17, 31, 0.82);
+  border: 1px solid rgba(32, 58, 95, 0.84);
+  border-radius: var(--radius);
+}
+
+.packet-inspector span {
+  color: var(--accent);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+}
+
+.packet-inspector strong {
+  color: var(--text);
+}
+
+.packet-inspector code {
+  padding: 12px;
+  line-height: 1.55;
+}
+
+.arcade-leaderboard {
+  background: rgba(13, 27, 47, 0.92);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2097,6 +2435,10 @@ a.leaderboard-row:hover {
   .main-home-grid,
   .security-lab-hero,
   .security-lab-layout,
+  .security-arcade-page .arcade-hero,
+  .arcade-switcher,
+  .packet-grid,
+  .firewall-actions,
   .post-card,
   .post-grid,
   .info-grid,

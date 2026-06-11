@@ -46,3 +46,10 @@ class SecurityGameScoreRead(BaseModel):
     total_count: int
     duration_seconds: int
     created_at: datetime
+
+
+class ArcadeScoreSubmit(BaseModel):
+    score: int = Field(ge=0, le=10000)
+    correct_count: int = Field(ge=0, le=1000)
+    total_count: int = Field(ge=1, le=1000)
+    duration_seconds: int = Field(default=0, ge=0, le=3600)

@@ -7,10 +7,12 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_current_user
 from app.db.session import get_db
 from app.models import SecurityGameQuestion, SecurityGameScore, User
-from app.schemas.game import SecurityGameResult, SecurityGameResultItem, SecurityGameScoreRead, SecurityGameSubmit, SecurityQuestionRead
+from app.schemas.game import ArcadeScoreSubmit, SecurityGameResult, SecurityGameResultItem, SecurityGameScoreRead, SecurityGameSubmit, SecurityQuestionRead
 
 
 router = APIRouter(prefix="/security-games", tags=["security-games"])
+
+ARCADE_GAMES = {"web-firewall-interceptor", "packet-detective-arcade"}
 
 
 @router.get("", response_model=list[str])
@@ -124,3 +126,38 @@ def leaderboard(game_name: str, db: Session = Depends(get_db)):
         )
         for row in rows
     ]
+
+
+@router.post("/{game_name}/score", response_model=SecurityGameScoreRead, status_code=status.HTTP_201_CREATED)
+def submit_arcade_score(
+    game_name: str,
+    payload: ArcadeScoreSubmit,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if game_name not in ARCADE_GAMES:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Arcade game not found")
+    if payload.correct_count > payload.total_count:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="correct_count cannot exceed total_count")
+
+    score_row = SecurityGameScore(
+        user_id=current_user.id,
+        game_name=game_name,
+        score=payload.score,
+        correct_count=payload.correct_count,
+        total_count=payload.total_count,
+        duration_seconds=payload.duration_seconds,
+    )
+    db.add(score_row)
+    db.commit()
+    db.refresh(score_row)
+    return SecurityGameScoreRead(
+        id=score_row.id,
+        username=current_user.username,
+        game_name=score_row.game_name,
+        score=score_row.score,
+        correct_count=score_row.correct_count,
+        total_count=score_row.total_count,
+        duration_seconds=score_row.duration_seconds,
+        created_at=score_row.created_at,
+    )

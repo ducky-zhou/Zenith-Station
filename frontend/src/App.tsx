@@ -14,6 +14,7 @@ import { OAuthCallback } from "./pages/OAuthCallback";
 import { PostDetail } from "./pages/PostDetail";
 import { PostEditor } from "./pages/PostEditor";
 import { Posts } from "./pages/Posts";
+import { SecurityArcade } from "./pages/SecurityArcade";
 import { SecurityGame } from "./pages/SecurityGame";
 
 export function App() {
@@ -28,6 +29,7 @@ export function App() {
         <Route path="register" element={<Register />} />
         <Route path="oauth/callback" element={<OAuthCallback />} />
         <Route path="security-game" element={<SecurityGame />} />
+        <Route path="security-arcade" element={<SecurityArcade />} />
         <Route path="minesweeper" element={<Minesweeper />} />
         <Route element={<ProtectedRoute />}>
           <Route path="favorites" element={<Favorites />} />
