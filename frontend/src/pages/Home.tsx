@@ -29,14 +29,11 @@ export function Home() {
         <div className="home-main-column">
           <div className="hero-band">
             <div className="terminal-window">
-              <div className="terminal-topbar">
-                <span />
-                <span />
-                <span />
-                <strong>~/secblog/lab</strong>
-              </div>
               <div className="terminal-body">
-                <div className="terminal-line muted">$ whoami</div>
+                <div className="hero-meta-row">
+                  <span className="hero-path">~/secblog/lab</span>
+                  <span className="hero-command">$ whoami</span>
+                </div>
                 <div className="terminal-identity">
                   <div className="hero-profile">
                     {profile?.avatar_url ? (
@@ -55,14 +52,12 @@ export function Home() {
                     <p className="hero-note">Learning in public. Building small security labs.</p>
                   </div>
                 </div>
-                <div className="terminal-line muted">$ cat interests.txt</div>
                 <div className="terminal-tags">
                   <span>Web Dev</span>
                   <span>CTF</span>
                   <span>AI Tools</span>
                   <span>Projects</span>
                 </div>
-                <div className="terminal-line muted">$ ./enter_lab --mode reader</div>
                 <div className="hero-actions">
                   <Link to="/posts" className="primary-button">
                     Explore Notes <ArrowRight aria-hidden="true" />

@@ -96,7 +96,7 @@ export function Layout() {
             </NavLink>
           )}
           <div className="terminal-ready">
-            <span>&gt; terminal ready</span>
+            <span>system ready</span>
             <i aria-hidden="true" />
           </div>
         </div>
