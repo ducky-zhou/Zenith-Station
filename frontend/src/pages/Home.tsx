@@ -69,7 +69,7 @@ export function Home() {
               </div>
             </div>
           </div>
-          <section>
+          <section className="recent-section">
             <div className="section-heading">
               <h2>最近文章</h2>
               <Link to="/posts">全部文章</Link>
