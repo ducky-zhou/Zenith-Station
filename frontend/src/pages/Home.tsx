@@ -1,16 +1,15 @@
-import { ArrowRight, Bot, ShieldCheck, UserRound } from "lucide-react";
+import { ArrowRight, ShieldCheck, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { api } from "../api/client";
 import { PostCard } from "../components/PostCard";
 import { StatusMessage } from "../components/StatusMessage";
-import type { Post, Profile, ScoreRow } from "../types";
+import type { Post, Profile } from "../types";
 
 export function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [leaderboard, setLeaderboard] = useState<ScoreRow[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -21,7 +20,6 @@ export function Home() {
         setProfile(profileData);
       })
       .catch((err: Error) => setError(err.message));
-    api.leaderboard("phishing-detective").then((rows) => setLeaderboard(rows.slice(0, 5))).catch(() => undefined);
   }, []);
 
   return (
@@ -52,8 +50,9 @@ export function Home() {
                       <ShieldCheck aria-hidden="true" />
                       Web & Security Lab
                     </div>
-                    <h1>Security Lab Notes</h1>
-                    <p>Web, Security, AI & Project Experiments</p>
+                    <h1>duck@secblog</h1>
+                    <p>Web Security / CTF / AI Infra / Notes</p>
+                    <p className="hero-note">Learning in public. Building small security labs.</p>
                   </div>
                 </div>
                 <div className="terminal-line muted">$ cat interests.txt</div>
@@ -128,51 +127,10 @@ export function Home() {
             <h2>Quick Links</h2>
             <Link to="/posts">/articles <ArrowRight aria-hidden="true" /></Link>
             <Link to="/security-game">/security-lab <ArrowRight aria-hidden="true" /></Link>
+            <Link to="/security-arcade">/security-arcade <ArrowRight aria-hidden="true" /></Link>
             <Link to="/minesweeper">/minesweeper <ArrowRight aria-hidden="true" /></Link>
             <Link to="/about">/about <ArrowRight aria-hidden="true" /></Link>
             <a href="/rss.xml">/rss.xml <ArrowRight aria-hidden="true" /></a>
-          </section>
-          <section className="info-panel terminal-panel">
-            <h2>Lab Entrance</h2>
-            <div className="lab-entrance-card">
-              <div className="lab-bot">
-                <Bot aria-hidden="true" />
-              </div>
-              <div>
-                <strong>Security Lab Challenge</strong>
-                <span>Phishing · SQLi · leaderboard</span>
-                <p>Practice security instincts in short missions.</p>
-                <Link to="/security-game" className="primary-button compact">
-                  <ArrowRight aria-hidden="true" /> Enter Lab
-                </Link>
-              </div>
-            </div>
-          </section>
-          <section className="info-panel terminal-panel leaderboard-panel">
-            <h2>Leaderboard</h2>
-            <div className="leaderboard-table">
-              <div className="leaderboard-head">
-                <span>#</span>
-                <span>operator</span>
-                <span>score</span>
-                <span>acc.</span>
-              </div>
-              {leaderboard.length > 0 ? (
-                leaderboard.map((row, index) => (
-                  <div className="leaderboard-item" key={row.id}>
-                    <span>{String(index + 1).padStart(2, "0")}</span>
-                    <strong>{row.username}</strong>
-                    <span>{row.score}</span>
-                    <span>{Math.round((row.correct_count / row.total_count) * 100)}%</span>
-                  </div>
-                ))
-              ) : (
-                <p className="empty-board">暂无排行</p>
-              )}
-            </div>
-            <Link to="/security-game" className="board-link">
-              查看完整排行榜 <ArrowRight aria-hidden="true" />
-            </Link>
           </section>
         </aside>
       </div>
