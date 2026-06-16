@@ -1,4 +1,4 @@
-import { BarChart3, Bomb, BookOpen, Bot, Gamepad2, Github, Globe2, Home, Lock, LogOut, Mail, Radar, Rss, Shield, UserRound } from "lucide-react";
+import { BarChart3, Bomb, BookOpen, Bot, Gamepad2, Home, Lock, LogOut, Radar, Shield, UserRound } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 
 import { useAuth } from "../auth";
@@ -63,20 +63,6 @@ export function Layout() {
           <div className="operator-card">
             <strong>duck@secblog</strong>
             <span>ZJU · InfoSec Student</span>
-            <div className="operator-links">
-              <a href="https://github.com/ducky-zhou" target="_blank" rel="noreferrer" title="GitHub">
-                <Github aria-hidden="true" />
-              </a>
-              <a href="mailto:admin@example.com" title="Email">
-                <Mail aria-hidden="true" />
-              </a>
-              <a href="/rss.xml" title="RSS">
-                <Rss aria-hidden="true" />
-              </a>
-              <a href="/" title="Site">
-                <Globe2 aria-hidden="true" />
-              </a>
-            </div>
           </div>
           {user ? (
             <>

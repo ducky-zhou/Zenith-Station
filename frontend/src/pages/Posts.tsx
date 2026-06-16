@@ -31,9 +31,10 @@ export function Posts() {
         <h1>文章</h1>
       </div>
       <form className="search-form" onSubmit={onSearch}>
-        <Search aria-hidden="true" />
         <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="搜索关键词" />
-        <button type="submit">搜索</button>
+        <button type="submit" aria-label="搜索">
+          <Search aria-hidden="true" />
+        </button>
       </form>
       {error && <StatusMessage tone="error" message={error} />}
       <div className="post-list">

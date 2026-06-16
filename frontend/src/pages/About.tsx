@@ -1,4 +1,4 @@
-import { Github, Mail, Shield } from "lucide-react";
+import { ArrowUpRight, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { api } from "../api/client";
@@ -32,31 +32,28 @@ export function About() {
           <p>{profile.bio}</p>
         </div>
       </div>
-      <div className="info-grid">
-        <section className="info-panel">
+      <section className="about-notes">
+        <div>
           <h2>兴趣</h2>
           <p>{profile.interests}</p>
-        </section>
-        <section className="info-panel">
+        </div>
+        <div>
           <h2>经历</h2>
           <p>{profile.experiences}</p>
-        </section>
-        <section className="info-panel">
-          <h2>联系</h2>
-          <div className="contact-list">
-            {profile.github_url && (
-              <a href={profile.github_url} target="_blank" rel="noreferrer">
-                <Github aria-hidden="true" /> GitHub
-              </a>
-            )}
-            {profile.email && (
-              <a href={`mailto:${profile.email}`}>
-                <Mail aria-hidden="true" /> {profile.email}
-              </a>
-            )}
-          </div>
-        </section>
-      </div>
+        </div>
+        <div className="contact-list">
+          {profile.github_url && (
+            <a href={profile.github_url} target="_blank" rel="noreferrer">
+              GitHub <ArrowUpRight aria-hidden="true" />
+            </a>
+          )}
+          {profile.email && (
+            <a href={`mailto:${profile.email}`}>
+              {profile.email} <ArrowUpRight aria-hidden="true" />
+            </a>
+          )}
+        </div>
+      </section>
     </section>
   );
 }

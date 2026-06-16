@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, UserRound } from "lucide-react";
+import { ArrowRight, UserRound } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -32,7 +32,6 @@ export function Home() {
               <div className="terminal-body">
                 <div className="hero-meta-row">
                   <span className="hero-path">~/secblog/lab</span>
-                  <span className="hero-command">$ whoami</span>
                 </div>
                 <div className="terminal-identity">
                   <div className="hero-profile">
@@ -43,20 +42,10 @@ export function Home() {
                     )}
                   </div>
                   <div>
-                    <div className="eyebrow">
-                      <ShieldCheck aria-hidden="true" />
-                      Web & Security Lab
-                    </div>
                     <h1>duck@secblog</h1>
                     <p>Web Security / CTF / AI Infra / Notes</p>
                     <p className="hero-note">Learning in public. Building small security labs.</p>
                   </div>
-                </div>
-                <div className="terminal-tags">
-                  <span>Web Dev</span>
-                  <span>CTF</span>
-                  <span>AI Tools</span>
-                  <span>Projects</span>
                 </div>
                 <div className="hero-actions">
                   <Link to="/posts" className="primary-button">
@@ -81,53 +70,6 @@ export function Home() {
             </div>
           </section>
         </div>
-        <aside className="home-aside-column side-stack">
-          <section className="info-panel terminal-panel status-panel">
-            <h2>Status</h2>
-            <dl>
-              <div>
-                <dt>mode</dt>
-                <dd>learning</dd>
-              </div>
-              <div>
-                <dt>focus</dt>
-                <dd>Web Security</dd>
-              </div>
-              <div>
-                <dt>stack</dt>
-                <dd>React / FastAPI</dd>
-              </div>
-              <div>
-                <dt>os</dt>
-                <dd>macOS / Kali Linux</dd>
-              </div>
-              <div>
-                <dt>uptime</dt>
-                <dd>7h 23m</dd>
-              </div>
-            </dl>
-          </section>
-          <section className="info-panel terminal-panel">
-            <h2>Topics</h2>
-            <div className="topic-list">
-              <span>#web-security</span>
-              <span>#ctf</span>
-              <span>#ai-tools</span>
-              <span>#full-stack</span>
-              <span>#linux</span>
-              <span>#notes</span>
-            </div>
-          </section>
-          <section className="info-panel terminal-panel quick-panel">
-            <h2>Quick Links</h2>
-            <Link to="/posts">/articles <ArrowRight aria-hidden="true" /></Link>
-            <Link to="/security-game">/security-lab <ArrowRight aria-hidden="true" /></Link>
-            <Link to="/security-arcade">/security-arcade <ArrowRight aria-hidden="true" /></Link>
-            <Link to="/minesweeper">/minesweeper <ArrowRight aria-hidden="true" /></Link>
-            <Link to="/about">/about <ArrowRight aria-hidden="true" /></Link>
-            <a href="/rss.xml">/rss.xml <ArrowRight aria-hidden="true" /></a>
-          </section>
-        </aside>
       </div>
     </section>
   );

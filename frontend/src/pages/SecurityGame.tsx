@@ -130,7 +130,7 @@ export function SecurityGame() {
     <section className="page-stack security-lab-page">
       <header className="security-lab-hero">
         <div className="security-lab-copy">
-          <span className="lab-eyebrow">Security Lab Challenge</span>
+          <span className="lab-eyebrow">security-lab</span>
           <h1>Security Lab</h1>
           <p>完成安全判断任务，提交成绩并冲击排行榜。</p>
           <div className="current-mission">
@@ -197,16 +197,21 @@ export function SecurityGame() {
                   </div>
                   <h2>{question.question}</h2>
                   <div className="option-grid">
-                    {question.options.map((option, optionIndex) => (
+                    {question.options.map((option, optionIndex) => {
+                      const value = String(optionIndex);
+                      const isSelected = answers[question.id] === value;
+                      const stateClass = detail ? (detail.correct_answer === value ? "correct" : isSelected ? "wrong" : "") : "";
+                      return (
                       <button
                         key={option}
                         type="button"
-                        className={answers[question.id] === String(optionIndex) ? "selected" : ""}
-                        onClick={() => setAnswers((current) => ({ ...current, [question.id]: String(optionIndex) }))}
+                        className={[isSelected ? "selected" : "", stateClass].filter(Boolean).join(" ")}
+                        onClick={() => setAnswers((current) => ({ ...current, [question.id]: value }))}
                       >
                         {option}
                       </button>
-                    ))}
+                    );
+                    })}
                   </div>
                   {detail && <StatusMessage tone={detail.correct ? "success" : "error"} message={detail.explanation} />}
                 </div>

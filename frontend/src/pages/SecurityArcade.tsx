@@ -1,4 +1,4 @@
-import { Activity, Filter, Radar, RotateCcw, Send, ShieldAlert, ShieldCheck, Trophy } from "lucide-react";
+import { Filter, Radar, RotateCcw, Send, ShieldAlert, Trophy } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { api } from "../api/client";
@@ -331,17 +331,17 @@ export function SecurityArcade() {
                   </div>
                   <code>{firewallEvents[firewallIndex].path}</code>
                   <p>{firewallEvents[firewallIndex].signal}</p>
-                  <div className="firewall-actions">
-                    <button type="button" onClick={() => handleFirewallAction("allow")}>
-                      <ShieldCheck aria-hidden="true" /> Allow
-                    </button>
-                    <button type="button" onClick={() => handleFirewallAction("block")}>
-                      <ShieldAlert aria-hidden="true" /> Block
-                    </button>
-                    <button type="button" onClick={() => handleFirewallAction("review")}>
-                      <Activity aria-hidden="true" /> Review
-                    </button>
-                  </div>
+                <div className="firewall-actions">
+                  <button type="button" onClick={() => handleFirewallAction("allow")}>
+                      Allow
+                  </button>
+                  <button type="button" onClick={() => handleFirewallAction("block")}>
+                      Block
+                  </button>
+                  <button type="button" onClick={() => handleFirewallAction("review")}>
+                      Review
+                  </button>
+                </div>
                 </article>
               ) : (
                 <div className="arcade-complete">

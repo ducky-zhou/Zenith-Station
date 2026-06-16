@@ -1,15 +1,31 @@
-import { Bookmark, Eye, MessageCircle, ThumbsUp } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import type { Post } from "../types";
 
+function formatDate(value: string) {
+  return new Date(value).toISOString().slice(0, 10);
+}
+
+function inferTags(post: Post) {
+  const source = `${post.title} ${post.summary}`.toLowerCase();
+  const tags: string[] = [];
+  if (source.includes("llm") || source.includes("ai")) tags.push("llm-sec");
+  if (source.includes("web") || source.includes("react") || source.includes("fastapi")) tags.push("web-dev");
+  if (source.includes("ctf") || source.includes("security") || source.includes("安全")) tags.push("security");
+  if (source.includes("docker") || source.includes("deploy")) tags.push("ops");
+  return (tags.length > 0 ? tags : ["notes"]).slice(0, 2);
+}
+
 export function PostCard({ post }: { post: Post }) {
+  const views = post.likes_count + post.favorites_count + post.comments_count;
   return (
     <article className="post-card">
       <div className="post-card-body">
         <div className="post-kicker">
-          <span>{post.status === "published" ? "PUBLIC" : "DRAFT"}</span>
-          <span>{new Date(post.created_at).toLocaleDateString()}</span>
+          <span>{formatDate(post.created_at)}</span>
+          {inferTags(post).map((tag) => (
+            <span className="post-tag" key={tag}>{tag}</span>
+          ))}
         </div>
         <Link to={`/posts/${post.id}`} className="post-title-link">
           <h2>{post.title}</h2>
@@ -17,18 +33,7 @@ export function PostCard({ post }: { post: Post }) {
         <p>{post.summary}</p>
       </div>
       <div className="post-meta">
-        <span title="热度">
-          <Eye aria-hidden="true" /> {post.likes_count + post.favorites_count + post.comments_count}
-        </span>
-        <span title="点赞">
-          <ThumbsUp aria-hidden="true" /> {post.likes_count}
-        </span>
-        <span title="评论">
-          <MessageCircle aria-hidden="true" /> {post.comments_count}
-        </span>
-        <span title="收藏">
-          <Bookmark aria-hidden="true" /> {post.favorites_count}
-        </span>
+        <span>{views} views</span>
       </div>
     </article>
   );
