@@ -1,61 +1,60 @@
-import { BarChart3, Bomb, BookOpen, Bot, Gamepad2, Home, Lock, LogOut, Radar, Shield, UserRound } from "lucide-react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { useAuth } from "../auth";
 
-const navItems = [
-  { to: "/", label: "首页", icon: Home },
-  { to: "/posts", label: "文章", icon: BookOpen },
-  { to: "/about", label: "关于", icon: UserRound },
-  { to: "/security-game", label: "安全闯关", icon: Shield },
-  { to: "/security-arcade", label: "安全街机", icon: Radar },
-  { to: "/minesweeper", label: "经典扫雷", icon: Bomb }
+const primaryNav = [
+  { to: "/", label: "首页" },
+  { to: "/posts", label: "文章" },
+  { to: "/about", label: "关于" }
 ];
+
+const labNav = [
+  { to: "/security-game", label: "安全闯关" },
+  { to: "/security-arcade", label: "安全街机" },
+  { to: "/minesweeper", label: "经典扫雷" }
+];
+
+const adminNav = [
+  { to: "/admin/posts", label: "文章后台" },
+  { to: "/admin/stats", label: "数据统计" },
+  { to: "/admin/ai", label: "AI 后台" }
+];
+
+function NavItems({ items }: { items: Array<{ to: string; label: string }> }) {
+  return (
+    <>
+      {items.map((item) => (
+        <NavLink key={item.to} to={item.to} className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
+          <span>{item.label}</span>
+        </NavLink>
+      ))}
+    </>
+  );
+}
 
 export function Layout() {
   const { user, isAdmin, logout } = useAuth();
+  const location = useLocation();
 
   return (
     <div className="app-shell">
       <aside className="sidebar">
         <NavLink to="/" className="brand">
-          <Shield aria-hidden="true" />
           <span>duck@secblog</span>
         </NavLink>
         <nav className="nav-list">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <NavLink key={item.to} to={item.to} className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-                <Icon aria-hidden="true" />
-                <span>{item.label}</span>
-              </NavLink>
-            );
-          })}
+          <NavItems items={primaryNav} />
+          <span className="nav-group-label">实验室</span>
+          <NavItems items={labNav} />
           {user && (
             <NavLink to="/favorites" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-              <Gamepad2 aria-hidden="true" />
               <span>收藏</span>
             </NavLink>
           )}
           {isAdmin && (
             <>
-              <NavLink to="/admin/posts" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-                <Lock aria-hidden="true" />
-                <span>文章后台</span>
-              </NavLink>
-              <NavLink to="/admin/profile" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-                <UserRound aria-hidden="true" />
-                <span>资料后台</span>
-              </NavLink>
-              <NavLink to="/admin/stats" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-                <BarChart3 aria-hidden="true" />
-                <span>数据统计</span>
-              </NavLink>
-              <NavLink to="/admin/ai" className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}>
-                <Bot aria-hidden="true" />
-                <span>AI 后台</span>
-              </NavLink>
+              <span className="nav-group-label">管理</span>
+              <NavItems items={adminNav} />
             </>
           )}
         </nav>
@@ -71,13 +70,11 @@ export function Layout() {
                 <small>{user.role}</small>
               </div>
               <button className="icon-text-button ghost" onClick={logout} type="button">
-                <LogOut aria-hidden="true" />
                 <span>退出</span>
               </button>
             </>
           ) : (
             <NavLink to="/login" className="icon-text-button">
-              <Lock aria-hidden="true" />
               <span>登录</span>
             </NavLink>
           )}
@@ -88,7 +85,9 @@ export function Layout() {
         </div>
       </aside>
       <main className="content">
-        <Outlet />
+        <div className="route-view" key={location.pathname}>
+          <Outlet />
+        </div>
         <footer className="app-footer">
           <span>[The quieter you become, the more you are able to hear.]</span>
           <strong>SecBlog v1.0.0</strong>
