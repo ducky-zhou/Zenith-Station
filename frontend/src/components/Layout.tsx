@@ -1,3 +1,4 @@
+import { Github } from "lucide-react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { useAuth } from "../auth";
@@ -40,7 +41,7 @@ export function Layout() {
     <div className="app-shell">
       <aside className="sidebar">
         <NavLink to="/" className="brand">
-          <span>duck@secblog</span>
+          <span>ducky@secblog</span>
         </NavLink>
         <nav className="nav-list">
           <NavItems items={primaryNav} />
@@ -60,7 +61,7 @@ export function Layout() {
         </nav>
         <div className="sidebar-footer">
           <div className="operator-card">
-            <strong>duck@secblog</strong>
+            <strong>ducky@secblog</strong>
             <span>ZJU · InfoSec Student</span>
           </div>
           {user ? (
@@ -89,13 +90,19 @@ export function Layout() {
           <Outlet />
         </div>
         <footer className="app-footer">
-          <div className="footer-line">
-            <span>[The quieter you become, the more you are able to hear.]</span>
-            <strong>SecBlog v1.0.0</strong>
+          <p className="footer-quote">[The quieter you become, the more you are able to hear.]</p>
+          <div className="footer-meta">
+            <span aria-hidden="true" />
+            <a className="beian-link" href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" rel="noreferrer">
+              浙ICP备2026042466号-1
+            </a>
+            <div className="footer-version">
+              <a className="github-link" href="https://github.com/ducky-zhou" target="_blank" rel="noreferrer" aria-label="GitHub">
+                <Github aria-hidden="true" />
+              </a>
+              <strong>SecBlog v1.0.0</strong>
+            </div>
           </div>
-          <a className="beian-link" href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" rel="noreferrer">
-            浙ICP备2026042466号-1
-          </a>
         </footer>
       </main>
     </div>

@@ -297,7 +297,7 @@ export function Minesweeper() {
     <section className="page-stack minesweeper-page">
       <header className="minesweeper-intro">
         <span className="quiz-kicker">Classic Minesweeper</span>
-        <h1>Win7 扫雷</h1>
+        <h1>扫雷</h1>
         <p>复刻经典扫雷体验：安全首点、右键插旗、问号标记、数字快速展开和本地最佳成绩。</p>
       </header>
 
