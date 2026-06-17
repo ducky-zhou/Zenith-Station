@@ -89,8 +89,13 @@ export function Layout() {
           <Outlet />
         </div>
         <footer className="app-footer">
-          <span>[The quieter you become, the more you are able to hear.]</span>
-          <strong>SecBlog v1.0.0</strong>
+          <div className="footer-line">
+            <span>[The quieter you become, the more you are able to hear.]</span>
+            <strong>SecBlog v1.0.0</strong>
+          </div>
+          <a className="beian-link" href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank" rel="noreferrer">
+            浙ICP备2026042466号-1
+          </a>
         </footer>
       </main>
     </div>

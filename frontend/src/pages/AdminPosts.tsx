@@ -26,8 +26,9 @@ export function AdminPosts() {
     <section className="page-stack">
       <div className="section-heading">
         <h1>文章后台</h1>
-        <Link to="/admin/posts/new" className="primary-button compact">
-          <Plus aria-hidden="true" /> 新建文章
+        <Link to="/admin/posts/new" className="primary-button compact admin-create-button" aria-label="新建文章">
+          <Plus aria-hidden="true" />
+          <span>新建文章</span>
         </Link>
       </div>
       {error && <StatusMessage tone="error" message={error} />}
