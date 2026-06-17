@@ -5300,6 +5300,7 @@ button {
 }
 
 .contact-list svg {
+  display: block !important;
   width: 14px;
   height: 14px;
   color: var(--color-text-3);
@@ -5412,14 +5413,36 @@ button {
 }
 
 .admin-create-button {
+  display: inline-flex;
   width: auto;
   min-width: max-content;
+  align-items: center;
+  gap: 8px;
   padding-inline: 14px;
+  color: #ffffff !important;
+  background: var(--color-text-1);
+  border-color: var(--color-text-1);
 }
 
 .admin-create-button span {
   display: inline !important;
   opacity: 1;
+  color: inherit;
+}
+
+.admin-create-button svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  color: inherit;
+}
+
+.row-actions .icon-button.danger {
+  color: #b91c1c;
+}
+
+.row-actions .icon-button.danger:hover {
+  color: #dc2626;
 }
 
 .minesweeper-stats {
