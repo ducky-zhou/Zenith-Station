@@ -34,10 +34,13 @@ export function AdminPosts() {
       {error && <StatusMessage tone="error" message={error} />}
       <div className="table-list">
         {posts.map((post) => (
-          <div className="table-row" key={post.id}>
-            <div>
+          <div className="table-row admin-post-row" key={post.id}>
+            <div className="post-admin-main">
               <strong>{post.title}</strong>
-              <span>{post.status}</span>
+              <span className={`post-status-badge ${post.status}`}>
+                <i aria-hidden="true" />
+                {post.status}
+              </span>
             </div>
             <div className="row-actions">
               <Link to={`/admin/posts/${post.id}/edit`} className="icon-button" title="编辑">

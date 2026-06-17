@@ -1,4 +1,4 @@
-import { ArrowUpRight, Shield } from "lucide-react";
+import { Github, Mail, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { api } from "../api/client";
@@ -44,12 +44,16 @@ export function About() {
         <div className="contact-list">
           {profile.github_url && (
             <a href={profile.github_url} target="_blank" rel="noreferrer">
-              GitHub <ArrowUpRight aria-hidden="true" />
+              <span aria-hidden="true">→</span>
+              <Github aria-hidden="true" />
+              <span>GitHub</span>
             </a>
           )}
           {profile.email && (
             <a href={`mailto:${profile.email}`}>
-              {profile.email} <ArrowUpRight aria-hidden="true" />
+              <span aria-hidden="true">→</span>
+              <Mail aria-hidden="true" />
+              <span>{profile.email}</span>
             </a>
           )}
         </div>
