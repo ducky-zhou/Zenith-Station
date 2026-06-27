@@ -5473,3 +5473,537 @@ button {
     align-items: flex-start;
   }
 }
+
+/* Minimal writing-interface pass: remove rounded card shells and normalize type. */
+:root {
+  --font-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, SimSun, Georgia, serif;
+}
+
+.section-heading h1,
+.page-stack > h1,
+.auth-panel h1,
+.minesweeper-intro h1 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.auth-panel {
+  width: min(100%, 520px);
+  max-width: 520px;
+  margin: 56px auto 0;
+  padding: 28px 0 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.auth-panel h1 {
+  margin: 0 0 26px;
+  font-size: clamp(30px, 5vw, 38px);
+  line-height: 1.15;
+}
+
+.auth-panel p {
+  margin: 24px 0 0;
+  color: var(--color-text-2);
+  font-size: 15px;
+}
+
+.auth-panel p a {
+  color: var(--color-text-1);
+  text-decoration: none;
+}
+
+.auth-panel p a:hover {
+  text-decoration: underline;
+}
+
+.form-stack {
+  gap: 22px;
+}
+
+.form-stack label,
+.editor-form label,
+.comment-form label {
+  gap: 8px;
+  color: var(--color-text-1);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-stack input,
+.editor-form input,
+.editor-form textarea,
+.editor-form select,
+.comment-form textarea,
+.section-heading select {
+  min-height: 44px;
+  color: var(--color-text-1);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.form-stack input:focus,
+.editor-form input:focus,
+.editor-form textarea:focus,
+.editor-form select:focus,
+.comment-form textarea:focus,
+.search-form:focus-within {
+  border-color: var(--color-text-1);
+  outline: 2px solid rgba(26, 25, 23, 0.08);
+  outline-offset: 2px;
+}
+
+.form-stack button,
+.editor-form button,
+.comment-form button,
+.primary-button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.auth-panel .form-stack button {
+  width: 100%;
+}
+
+.oauth-button {
+  justify-content: center;
+  width: 100%;
+  min-height: 42px;
+  margin-top: 16px;
+  color: var(--color-text-1);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.oauth-button svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.oauth-button:hover {
+  color: var(--color-text-1);
+  background: transparent;
+  border-color: var(--color-text-1);
+}
+
+.search-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px;
+  width: min(100%, 480px);
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+}
+
+.search-form input {
+  min-height: 42px;
+  padding: 0 8px 0 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-serif);
+  font-size: 16px;
+}
+
+.search-form button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  color: var(--color-text-3);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+
+.search-form button:hover {
+  color: var(--color-text-1);
+  background: transparent;
+  border: 0;
+}
+
+.post-card h2 {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.post-card p {
+  color: var(--color-text-2);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.post-kicker .post-tag {
+  border-radius: 3px;
+}
+
+.editor-page {
+  width: min(100%, 920px);
+  max-width: 920px;
+  align-items: stretch;
+}
+
+.editor-page > h1 {
+  margin-bottom: 22px;
+  font-size: clamp(32px, 4.8vw, 44px);
+  line-height: 1.15;
+}
+
+.editor-page .editor-form {
+  gap: 24px;
+  padding: 24px 0 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.editor-page .editor-form textarea {
+  min-height: 520px;
+  resize: vertical;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.editor-page .editor-form button {
+  justify-self: start;
+  width: auto;
+  min-width: 128px;
+}
+
+.minesweeper-page {
+  align-items: start;
+}
+
+.minesweeper-intro {
+  width: min(100%, 920px);
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+.minesweeper-intro h1 {
+  font-size: clamp(32px, 4.6vw, 44px);
+  line-height: 1.15;
+}
+
+.minesweeper-intro p {
+  max-width: 720px;
+  color: var(--color-text-2);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.winmine-shell {
+  border-radius: 8px;
+}
+
+.minesweeper-stats article {
+  padding: 14px 0 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (max-width: 760px) {
+  .auth-panel {
+    margin-top: 28px;
+  }
+
+  .editor-page {
+    width: 100%;
+  }
+
+  .editor-page .editor-form textarea {
+    min-height: 360px;
+  }
+}
+
+/* Minimal minesweeper board: keep classic rules, remove heavy Win7 chrome. */
+.minesweeper-page {
+  width: min(100%, 980px);
+  max-width: 980px;
+  align-items: stretch;
+}
+
+.winmine-shell {
+  display: grid;
+  width: fit-content;
+  max-width: 100%;
+  overflow: auto;
+  color: var(--color-text-1);
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: none;
+  font-family: var(--font-sans);
+}
+
+.winmine-titlebar {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: 24px;
+  min-height: 0;
+  padding: 14px 0;
+  color: var(--color-text-1);
+  background: transparent;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 14px;
+  font-weight: 500;
+  text-shadow: none;
+}
+
+.winmine-titlebar span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.winmine-titlebar svg {
+  display: none;
+}
+
+.winmine-counters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.winmine-counters span {
+  color: var(--color-text-3);
+}
+
+.winmine-counters strong {
+  color: var(--color-text-1);
+  font-weight: 500;
+}
+
+.winmine-menu {
+  display: flex;
+  gap: 22px;
+  padding: 14px 0;
+  background: transparent;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.winmine-menu button {
+  display: inline-grid;
+  gap: 3px;
+  padding: 0 0 8px;
+  color: var(--color-text-3);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.winmine-menu button span {
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.winmine-menu button.active,
+.winmine-menu button:hover {
+  color: var(--color-text-1);
+  background: transparent;
+  border-bottom-color: var(--color-text-1);
+  box-shadow: none;
+}
+
+.minefield-frame {
+  width: fit-content;
+  max-width: 100%;
+  margin: 18px 0 0;
+  padding: 0;
+  overflow: auto;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.minefield-wrap {
+  width: fit-content;
+  max-width: 100%;
+  overflow: auto;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+
+.minefield {
+  --cell-size: 30px;
+  display: grid;
+  width: max-content;
+  gap: 0;
+  padding: 0;
+  background: var(--color-border);
+}
+
+.mine-cell {
+  display: grid;
+  place-items: center;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  min-width: var(--cell-size);
+  min-height: var(--cell-size);
+  color: var(--color-text-1);
+  background: #f4f2ee;
+  border: 0;
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: none;
+  font-family: var(--font-mono);
+  font-size: calc(var(--cell-size) * 0.58);
+  font-weight: 600;
+  line-height: 1;
+  text-shadow: none;
+  transform: none;
+  transition: background-color 0.08s ease, color 0.08s ease;
+}
+
+.mine-cell.covered:hover {
+  background: #ece9e3;
+  filter: none;
+}
+
+.mine-cell:active {
+  transform: none;
+}
+
+.mine-cell.revealed {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: none;
+}
+
+.mine-cell.flagged {
+  color: #b91c1c;
+  background: #f4f2ee;
+}
+
+.mine-cell.flagged::before,
+.mine-cell.flagged::after,
+.mine-cell.wrong::before,
+.mine-cell.wrong::after {
+  content: none;
+}
+
+.mine-cell.questioned {
+  color: var(--color-text-3);
+  font-family: var(--font-mono);
+  text-shadow: none;
+}
+
+.mine-cell.exploded {
+  color: #ffffff;
+  background: #1a1917;
+}
+
+.mine-cell.wrong {
+  color: #dc2626;
+  background: #fff7f7;
+}
+
+.smiley-button {
+  display: inline-flex;
+  place-items: initial;
+  width: auto;
+  height: auto;
+  min-height: 32px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  color: var(--color-text-1);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: none;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.smiley-button:hover {
+  border-color: var(--color-text-1);
+  filter: none;
+}
+
+.smiley-button:active {
+  transform: none;
+}
+
+.winmine-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 14px 0 0;
+  padding: 0 0 14px;
+  color: var(--color-text-2);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.minesweeper-hint {
+  color: var(--color-text-3);
+}
+
+@media (max-width: 760px) {
+  .winmine-titlebar {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .winmine-counters {
+    justify-content: flex-start;
+  }
+
+  .winmine-menu {
+    gap: 14px;
+    overflow-x: auto;
+  }
+}

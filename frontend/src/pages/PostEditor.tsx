@@ -42,7 +42,7 @@ export function PostEditor() {
   };
 
   return (
-    <section className="page-stack">
+    <section className="page-stack editor-page">
       <h1>{id ? "编辑文章" : "新建文章"}</h1>
       {error && <StatusMessage tone="error" message={error} />}
       <form className="editor-form" onSubmit={submit}>
@@ -65,7 +65,7 @@ export function PostEditor() {
           正文
           <textarea value={content} onChange={(event) => setContent(event.target.value)} required rows={18} />
         </label>
-        <button type="submit">保存</button>
+        <button type="submit">{status === "published" ? "发布文章" : "保存草稿"}</button>
       </form>
     </section>
   );

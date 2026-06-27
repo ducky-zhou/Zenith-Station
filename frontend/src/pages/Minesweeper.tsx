@@ -1,4 +1,3 @@
-import { Bomb, Clock3, Flag, RotateCcw } from "lucide-react";
 import { MouseEvent, useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 
@@ -171,9 +170,10 @@ function writeBestTime(id: DifficultyId, seconds: number) {
 
 function cellLabel(cell: Cell) {
   if (cell.revealed) {
-    if (cell.mine) return "✹";
+    if (cell.mine) return "●";
     return cell.adjacent || "";
   }
+  if (cell.mark === "flag") return "⚑";
   if (cell.mark === "question") return "?";
   return "";
 }
@@ -183,7 +183,6 @@ export function Minesweeper() {
   const [board, setBoard] = useState(() => emptyBoard(difficulties[0].rows, difficulties[0].cols));
   const [phase, setPhase] = useState<Phase>("ready");
   const [seconds, setSeconds] = useState(0);
-  const [pressedFace, setPressedFace] = useState(false);
   const [bestTimes, setBestTimes] = useState<Partial<Record<DifficultyId, number>>>({});
 
   const flatBoard = useMemo(() => board.flat(), [board]);
@@ -192,7 +191,7 @@ export function Minesweeper() {
   const minesLeft = difficulty.mines - flags;
   const totalSafeCells = difficulty.rows * difficulty.cols - difficulty.mines;
   const progress = Math.round((revealed / totalSafeCells) * 100);
-  const cellSize = difficulty.id === "expert" ? 27 : difficulty.id === "intermediate" ? 31 : 38;
+  const cellSize = difficulty.id === "expert" ? 24 : difficulty.id === "intermediate" ? 28 : 34;
 
   useEffect(() => {
     api.track("page_view", "/minesweeper");
@@ -216,7 +215,6 @@ export function Minesweeper() {
     setBoard(emptyBoard(nextDifficulty.rows, nextDifficulty.cols));
     setPhase("ready");
     setSeconds(0);
-    setPressedFace(false);
   };
 
   const finishMove = (next: Cell[][]) => {
@@ -285,7 +283,6 @@ export function Minesweeper() {
     setBoard(next);
   };
 
-  const face = phase === "lost" ? "☹" : phase === "won" ? "😎" : pressedFace ? "😮" : "☺";
   const statusText =
     phase === "won"
       ? "Cleared. All safe cells are open."
@@ -303,9 +300,21 @@ export function Minesweeper() {
 
       <div className="winmine-shell">
         <div className="winmine-titlebar">
-          <span>
-            <Bomb aria-hidden="true" /> Minesweeper
-          </span>
+          <span>{difficulty.label}</span>
+          <div className="winmine-counters" aria-label="game status">
+            <span>
+              time <strong>{formatCounter(seconds)}</strong>
+            </span>
+            <span>
+              mines <strong>{formatCounter(minesLeft)}</strong>
+            </span>
+            <span>
+              best <strong>{bestTimes[difficulty.id] ? `${bestTimes[difficulty.id]}s` : "--"}</strong>
+            </span>
+          </div>
+          <button className="smiley-button" type="button" onClick={() => reset()}>
+            restart
+          </button>
         </div>
 
         <div className="winmine-menu" aria-label="difficulty">
@@ -346,11 +355,6 @@ export function Minesweeper() {
                     onClick={() => reveal(row, col)}
                     onDoubleClick={() => chord(row, col)}
                     onContextMenu={(event) => cycleMark(event, row, col)}
-                    onMouseDown={() => {
-                      if (phase === "playing" || phase === "ready") setPressedFace(true);
-                    }}
-                    onMouseUp={() => setPressedFace(false)}
-                    onMouseLeave={() => setPressedFace(false)}
                     aria-label={`row ${row + 1} col ${col + 1}`}
                   >
                     {cellLabel(cell)}
@@ -358,21 +362,6 @@ export function Minesweeper() {
                 ))
               )}
             </div>
-          </div>
-        </div>
-
-        <div className="winmine-bottom">
-          <div className="round-status" title="Timer">
-            <Clock3 aria-hidden="true" />
-          </div>
-          <span className="glass-counter">{formatCounter(seconds)}</span>
-          <button className="smiley-button" type="button" onClick={() => reset()} title="Restart">
-            {face}
-            <RotateCcw aria-hidden="true" />
-          </button>
-          <span className="glass-counter mines-left">{formatCounter(minesLeft)}</span>
-          <div className="round-status" title="Mines left">
-            <Flag aria-hidden="true" />
           </div>
         </div>
 

@@ -12,10 +12,10 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [githubEnabled, setGithubEnabled] = useState(false);
+  const [githubEnabled, setGithubEnabled] = useState(true);
 
   useEffect(() => {
-    api.githubEnabled().then((data) => setGithubEnabled(data.enabled)).catch(() => undefined);
+    api.githubEnabled().then((data) => setGithubEnabled(data.enabled)).catch(() => setGithubEnabled(true));
   }, []);
 
   const submit = async (event: FormEvent) => {
